@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<title>IBFA® - Ranking & Match Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+<style>
+/* ===== THEME ===== */
+[data-theme="dark"]{
+  --bg:#03051a;--bg2:#070b20;--bg3:#0c1030;--bg4:#111530;--card:#141830;
+  --nav-bg:rgba(3,5,26,0.97);
+  --hero-bg:linear-gradient(160deg,#03051a 0%,#0a1040 50%,#03051a 100%);
+  --t1:#ffffff;--t2:#8899bb;--t3:#556080;--tm:#334466;
+  --bdr:rgba(255,255,255,0.06);--bdr2:rgba(0,100,255,0.25);
+  --inp-bg:#080c24;--card-hover:rgba(255,255,255,0.03);
+  --shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+[data-theme="light"]{
+  --bg:#f0f2f8;--bg2:#e8eaf5;--bg3:#ffffff;--bg4:#f5f6fc;--card:#ffffff;
+  --nav-bg:rgba(255,255,255,0.97);
+  --hero-bg:linear-gradient(160deg,#1a3a8a 0%,#0d2060 100%);
+  --t1:#0a0e1a;--t2:#445577;--t3:#8899bb;--tm:#bbccdd;
+  --bdr:rgba(0,0,0,0.07);--bdr2:rgba(0,80,200,0.2);
+  --inp-bg:#ffffff;--card-hover:rgba(0,0,0,0.02);
+  --shadow:0 4px 24px rgba(0,0,50,0.08);
+}
+:root{
+  --ibfa:#003399;--ibfa2:#0044cc;--ibfa-light:#4488ff;
+  --acc:#00aaff;--acc2:#0088dd;
+  --gold:#f5c518;--silver:#b0b8c8;--bronze:#c87941;
+  --grn:#00c853;--red:#ff1744;--yel:#ffab00;--org:#ff6d00;
+  --owner:#cc44ff;
+  --f1:'Inter',sans-serif;--f2:'Rajdhani',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f1);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--ibfa2);border-radius:2px;}
+
+/* ===== NAV ===== */
+nav{
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:2px solid var(--ibfa);
+  position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 20px rgba(0,50,150,0.3);
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  height:54px;display:flex;align-items:center;
+  padding:0 12px;gap:8px;
+}
+.nav-logo{
+  display:flex;align-items:center;text-decoration:none;
+  flex-shrink:0;margin-right:4px;
+}
+.ibfa-logo{
+  background:var(--ibfa);color:#fff;
+  font-family:var(--f2);font-weight:700;font-size:20px;
+  letter-spacing:2px;padding:5px 12px;border-radius:4px;
+  line-height:1;user-select:none;white-space:nowrap;
+}
+.ibfa-logo sup{font-size:9px;letter-spacing:0;position:relative;top:-5px;opacity:0.8;}
+.nav-tabs{
+  display:flex;flex:1;overflow-x:auto;height:54px;
+  scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{
+  height:54px;padding:0 14px;
+  display:flex;align-items:center;
+  cursor:pointer;font-size:12px;font-weight:600;
+  color:var(--t2);white-space:nowrap;
+  border:none;background:none;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;letter-spacing:0.3px;
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+  flex-shrink:0;
+}
+.nav-tab:hover{color:var(--t1);background:rgba(0,80,200,0.05);}
+.nav-tab.active{color:#fff;border-bottom-color:var(--ibfa-light);background:rgba(0,80,200,0.1);}
+[data-theme="light"] .nav-tab.active{color:var(--ibfa);}
+
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto;}
+.theme-btn{
+  width:32px;height:32px;border-radius:4px;
+  border:1.5px solid var(--bdr2);background:transparent;
+  color:var(--t2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  flex-shrink:0;
+  transition:background 0.15s,color 0.15s;
+}
+.theme-btn:hover{background:rgba(255,255,255,0.05);color:var(--t1);}
+.nav-btn{
+  padding:6px 14px;border-radius:4px;font-size:12px;font-weight:600;
+  cursor:pointer;border:1.5px solid var(--bdr2);
+  background:transparent;color:var(--acc);letter-spacing:0.3px;
+  white-space:nowrap;flex-shrink:0;
+  transition:background 0.15s;
+}
+.nav-btn:hover{background:rgba(0,170,255,0.1);}
+.nav-btn.primary{background:var(--ibfa);color:#fff;border-color:var(--ibfa);}
+.nav-btn.primary:hover{background:var(--ibfa2);}
+
+/* NAV USER CHIP */
+.nav-user-chip{
+  display:flex;align-items:center;gap:7px;
+  cursor:pointer;padding:4px 10px 4px 4px;
+  border-radius:20px;border:1.5px solid var(--bdr);
+  background:var(--bg4);transition:border-color 0.15s,background 0.15s;
+  flex-shrink:0;position:relative;
+}
+.nav-user-chip:hover{border-color:var(--bdr2);}
+.nav-user-chip img{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid var(--ibfa);object-fit:cover;flex-shrink:0;
+}
+.nav-user-chip span{
+  font-size:12px;font-weight:700;
+  max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.nav-chevron{font-size:9px;color:var(--t3);transition:transform 0.2s;}
+.nav-user-chip.open .nav-chevron{transform:rotate(180deg);}
+
+/* DROPDOWN */
+.nav-dd{
+  position:absolute;top:calc(100% + 10px);right:0;
+  background:var(--bg3);border:1px solid var(--bdr2);
+  border-radius:10px;min-width:220px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.6);
+  z-index:400;overflow:hidden;
+  opacity:0;transform:translateY(-8px) scale(0.97);
+  pointer-events:none;
+  transition:opacity 0.18s,transform 0.18s;
+}
+.nav-user-chip.open .nav-dd{
+  opacity:1;transform:translateY(0) scale(1);
+  pointer-events:all;
+}
+.nav-dd-head{
+  padding:14px 16px;border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;gap:10px;
+}
+.nav-dd-av{
+  width:40px;height:40px;border-radius:50%;
+  border:2px solid var(--ibfa);object-fit:cover;flex-shrink:0;
+}
+.nav-dd-info{flex:1;min-width:0;}
+.nav-dd-name{font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.nav-dd-role{font-size:10px;color:var(--t2);margin-top:2px;}
+.nav-dd-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;font-size:13px;font-weight:600;
+  cursor:pointer;background:none;border:none;
+  width:100%;text-align:left;color:var(--t1);
+  transition:background 0.12s;
+}
+.nav-dd-item:hover{background:var(--card-hover);}
+.nav-dd-item.red{color:var(--red);}
+.nav-dd-item.red:hover{background:rgba(255,23,68,0.07);}
+.nav-dd-sep{height:1px;background:var(--bdr);margin:3px 0;}
+
+/* ===== HERO ===== */
+.hero{
+  background:var(--hero-bg);
+  padding:40px 16px 36px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(0,100,255,0.15) 0%,transparent 70%);}
+.hero::after{
+  content:'IBFA';position:absolute;
+  font-family:var(--f2);font-size:min(25vw,200px);font-weight:700;
+  color:rgba(255,255,255,0.022);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;letter-spacing:8px;white-space:nowrap;
+}
+.hero-content{position:relative;z-index:1;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ibfa);color:#fff;border-radius:3px;
+  padding:4px 12px;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;
+}
+.hero h1{
+  font-family:var(--f2);font-size:clamp(28px,7vw,64px);
+  font-weight:700;line-height:1.05;margin-bottom:10px;
+  color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.3);
+}
+.hero h1 .accent{color:var(--acc);}
+.hero p{color:rgba(255,255,255,0.6);font-size:13px;max-width:440px;margin:0 auto 24px;line-height:1.6;}
+.hero-stats{
+  display:inline-flex;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:6px;overflow:hidden;
+}
+.hero-stat{padding:10px 20px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-n{font-family:var(--f2);font-size:26px;font-weight:700;color:#fff;line-height:1;}
+.hero-stat-l{font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.2px;margin-top:3px;}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1200px;margin:0 auto;}
+.section{padding:20px 14px;}
+.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.section-title{font-family:var(--f2);font-size:18px;font-weight:700;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';width:4px;height:18px;background:var(--ibfa);border-radius:2px;display:inline-block;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* ===== RANKING ===== */
+.rank-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);}
+.rank-table{width:100%;border-collapse:collapse;}
+.rank-table th{padding:10px 8px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);background:var(--bg4);border-bottom:1px solid var(--bdr);}
+.rank-table td{padding:10px 8px;border-bottom:1px solid var(--bdr);font-size:12px;vertical-align:middle;}
+.rank-table tr:last-child td{border-bottom:none;}
+.rank-table tbody tr:hover td{background:var(--card-hover);}
+.rn{font-family:var(--f2);font-size:16px;font-weight:700;min-width:28px;display:inline-block;text-align:center;}
+.rn.g{color:var(--gold)}.rn.s{color:var(--silver)}.rn.b{color:var(--bronze)}
+.rflag{font-size:20px;margin-right:6px;}
+.rname{font-weight:600;font-size:13px;}
+.rcode{color:var(--t2);font-size:10px;margin-left:3px;}
+.rstat{font-family:var(--f2);font-size:14px;font-weight:600;text-align:center;}
+.rpts{font-family:var(--f2);font-size:15px;font-weight:700;color:var(--ibfa2);text-align:center;}
+[data-theme="dark"] .rpts{color:var(--acc);}
+.trend-up{color:var(--grn);font-size:11px;font-weight:700;}
+.trend-down{color:var(--red);font-size:11px;font-weight:700;}
+.trend-same{color:var(--t3);font-size:11px;}
+.form-wrap{display:flex;gap:2px;min-width:48px;}
+.fb{width:16px;height:16px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;}
+.fw{background:rgba(0,200,83,0.2);color:var(--grn);}
+.fd{background:rgba(255,171,0,0.2);color:var(--yel);}
+.fl{background:rgba(255,23,68,0.2);color:var(--red);}
+
+/* ===== MATCHES ===== */
+.matches-list{display:flex;flex-direction:column;gap:10px;}
+.match-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);transition:border-color 0.2s;}
+.match-card:hover{border-color:var(--bdr2);}
+.match-top{padding:8px 14px;background:var(--bg4);display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--t2);border-bottom:1px solid var(--bdr);}
+.match-comp{font-weight:600;letter-spacing:0.3px;}
+.ms{padding:3px 8px;border-radius:3px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.ms-upcoming{background:rgba(100,120,160,0.15);color:var(--t2);}
+.ms-live{background:rgba(0,200,83,0.15);color:var(--grn);animation:blink 1.5s infinite;}
+.ms-done{background:rgba(0,100,255,0.1);color:var(--acc);}
+.ms-cancelled{background:rgba(255,23,68,0.1);color:var(--red);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+.match-main{padding:14px;}
+.match-grid{display:grid;grid-template-columns:1fr 100px 1fr;align-items:center;gap:8px;}
+.team-blk{text-align:center;}
+.team-em{font-size:32px;display:block;margin-bottom:4px;line-height:1;}
+.team-nm{font-weight:700;font-size:13px;}
+.score-blk{text-align:center;}
+.score-num{font-family:var(--f2);font-size:36px;font-weight:700;line-height:1;color:var(--t1);}
+.score-num .sep{color:var(--t3);margin:0 3px;}
+.score-vs{font-family:var(--f2);font-size:18px;color:var(--t3);font-weight:600;}
+.match-date{font-size:10px;color:var(--t2);text-align:center;margin-top:5px;}
+.match-act{padding:8px 14px;border-top:1px solid var(--bdr);display:flex;gap:6px;flex-wrap:wrap;background:var(--bg4);}
+
+/* COMMENTS */
+.cmt-sec{padding:12px 14px;border-top:1px solid var(--bdr);}
+.cmt-hd{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+.cmt-row{display:flex;gap:7px;margin-bottom:8px;}
+.cmt-inp{flex:1;background:var(--inp-bg);border:1px solid var(--bdr);border-radius:4px;padding:7px 10px;color:var(--t1);font-size:12px;outline:none;font-family:var(--f1);}
+.cmt-inp:focus{border-color:var(--ibfa);}
+.cmt-inp::placeholder{color:var(--t3);}
+.cmt-send{padding:7px 14px;background:var(--ibfa);border:none;border-radius:4px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.cmt-send:hover{background:var(--ibfa2);}
+.cmt-list{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;}
+.cmt-item{display:flex;gap:7px;}
+.cmt-av{width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg4);}
+.cmt-box{background:var(--bg4);border-radius:4px;padding:7px 9px;flex:1;border:1px solid var(--bdr);}
+.cmt-auth{font-size:11px;font-weight:700;color:var(--acc);margin-bottom:2px;}
+.cmt-txt{font-size:12px;line-height:1.4;color:var(--t1);word-break:break-word;}
+.cmt-time{font-size:9px;color:var(--t3);margin-top:2px;}
+
+/* ===== NATIONS ===== */
+.nations-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.nation-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;box-shadow:var(--shadow);transition:border-color 0.2s,transform 0.2s;}
+.nation-card:hover{border-color:var(--bdr2);transform:translateY(-2px);}
+.nation-img{width:100%;height:70px;object-fit:cover;display:block;}
+.nation-body{padding:12px;}
+.nat-flag{font-size:30px;margin-bottom:6px;display:block;}
+.nat-name{font-weight:700;font-size:14px;margin-bottom:1px;}
+.nat-code{color:var(--t2);font-size:10px;margin-bottom:10px;}
+.nat-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.nat-stat{background:var(--bg4);border-radius:4px;padding:6px;}
+.nat-stat-n{font-family:var(--f2);font-size:18px;font-weight:700;color:var(--acc);line-height:1;}
+.nat-stat-l{font-size:9px;color:var(--t2);margin-top:1px;}
+.nation-edit-btn{width:100%;padding:7px;background:transparent;border:none;border-top:1px solid var(--bdr);color:var(--t2);font-size:11px;font-weight:700;cursor:pointer;transition:background 0.15s,color 0.15s;}
+.nation-edit-btn:hover{background:var(--card-hover);color:var(--acc);}
+
+/* ===== GROUP CHAT ===== */
+.chat-wrap{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:8px;overflow:hidden;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;height:calc(100vh - 200px);
+  min-height:400px;max-height:700px;
+}
+.chat-header{
+  padding:12px 16px;background:var(--bg4);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;gap:10px;
+}
+.chat-header-ico{font-size:20px;}
+.chat-header-info{flex:1;}
+.chat-header-title{font-weight:700;font-size:14px;}
+.chat-header-sub{font-size:11px;color:var(--t2);}
+.chat-online{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--grn);}
+.chat-online-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{display:flex;gap:8px;align-items:flex-end;}
+.chat-msg.me{flex-direction:row-reverse;align-items:flex-end;}
+.chat-av{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg4);}
+.chat-bubble{
+  max-width:85%;padding:9px 13px;border-radius:12px;display:inline-block;
+  font-size:13px;line-height:1.5;word-break:break-word;min-width:60px;
+}
+.chat-msg:not(.me) .chat-bubble{background:var(--bg4);border-radius:0 12px 12px 12px;border:1px solid var(--bdr);}
+.chat-msg.me .chat-bubble{background:var(--ibfa);color:#fff;border-radius:12px 0 12px 12px;}
+.chat-bubble-name{font-size:10px;font-weight:700;color:var(--acc);margin-bottom:3px;}
+.chat-msg.me .chat-bubble-name{display:none;}
+.chat-bubble-time{font-size:9px;color:rgba(255,255,255,0.5);margin-top:3px;text-align:right;}
+.chat-msg:not(.me) .chat-bubble-time{color:var(--t3);text-align:left;}
+.chat-del-btn{background:none;border:none;color:rgba(255,255,255,0.3);font-size:11px;cursor:pointer;padding:2px 4px;border-radius:3px;margin-left:4px;display:none;}
+.chat-bubble:hover .chat-del-btn{display:inline;}
+.chat-del-btn:hover{color:var(--red);}
+.chat-msg:not(.me) .chat-bubble-time{color:var(--t3);text-align:left;}
+.chat-date-sep{text-align:center;font-size:10px;color:var(--t3);padding:4px 0;position:relative;}
+.chat-date-sep::before,.chat-date-sep::after{content:'';position:absolute;top:50%;width:35%;height:1px;background:var(--bdr);}
+.chat-date-sep::before{left:0;}
+.chat-date-sep::after{right:0;}
+.chat-input-area{
+  padding:10px 12px;background:var(--bg4);
+  border-top:1px solid var(--bdr);
+  display:flex;gap:8px;align-items:center;
+}
+.chat-input{
+  flex:1;background:var(--inp-bg);border:1.5px solid var(--bdr);
+  border-radius:20px;padding:9px 16px;
+  color:var(--t1);font-size:13px;outline:none;
+  font-family:var(--f1);transition:border-color 0.2s;
+}
+.chat-input:focus{border-color:var(--ibfa);}
+.chat-input::placeholder{color:var(--t3);}
+.chat-send-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--ibfa);border:none;color:#fff;
+  font-size:16px;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;
+  flex-shrink:0;transition:background 0.15s,transform 0.1s;
+}
+.chat-send-btn:hover{background:var(--ibfa2);}
+.chat-send-btn:active{transform:scale(0.93);}
+.chat-login-msg{
+  flex:1;text-align:center;padding:10px;
+  font-size:13px;color:var(--t2);
+}
+.chat-login-msg a{color:var(--acc);cursor:pointer;font-weight:700;}
+
+/* ===== BUTTONS ===== */
+.btn{
+  padding:7px 14px;border-radius:4px;font-size:11px;font-weight:700;
+  cursor:pointer;border:1.5px solid transparent;
+  display:inline-flex;align-items:center;gap:5px;
+  letter-spacing:0.4px;text-transform:uppercase;
+  transition:all 0.15s;
+}
+.btn-ibfa{background:var(--ibfa);color:#fff;border-color:var(--ibfa);}
+.btn-ibfa:hover{background:var(--ibfa2);}
+.btn-outline{background:transparent;color:var(--t1);border-color:var(--bdr2);}
+.btn-outline:hover{background:var(--card-hover);}
+.btn-danger{background:rgba(255,23,68,0.1);color:var(--red);border-color:rgba(255,23,68,0.25);}
+.btn-danger:hover{background:rgba(255,23,68,0.2);}
+.btn-success{background:rgba(0,200,83,0.1);color:var(--grn);border-color:rgba(0,200,83,0.25);}
+.btn-success:hover{background:rgba(0,200,83,0.2);}
+.btn-warn{background:rgba(255,171,0,0.1);color:var(--yel);border-color:rgba(255,171,0,0.25);}
+.btn-warn:hover{background:rgba(255,171,0,0.2);}
+.btn-sm{padding:5px 9px;font-size:10px;}
+
+/* ===== ADMIN ===== */
+.admin-wrap{background:var(--card);border:1px solid rgba(255,171,0,0.2);border-radius:8px;padding:16px;margin-bottom:20px;box-shadow:var(--shadow);}
+.admin-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,171,0,0.08);border:1px solid rgba(255,171,0,0.25);border-radius:3px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--yel);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.8px;}
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.adm-card{background:var(--bg4);border:1px solid var(--bdr);border-radius:6px;padding:12px;cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+.adm-card:hover{border-color:var(--bdr2);background:var(--card-hover);}
+.adm-ico{font-size:20px;margin-bottom:5px;}
+.adm-title{font-weight:700;font-size:12px;margin-bottom:1px;}
+.adm-desc{font-size:10px;color:var(--t2);}
+
+/* OWNER USER MGMT */
+.owner-wrap{background:var(--card);border:1px solid rgba(180,50,255,0.2);border-radius:8px;padding:16px;box-shadow:var(--shadow);}
+.owner-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(180,50,255,0.08);border:1px solid rgba(180,50,255,0.3);border-radius:3px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--owner);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.8px;}
+.user-list{display:flex;flex-direction:column;gap:7px;}
+.user-row{display:flex;align-items:center;gap:9px;background:var(--bg4);border:1px solid var(--bdr);border-radius:6px;padding:9px 12px;}
+.user-av{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--bg3);flex-shrink:0;}
+.user-info{flex:1;min-width:0;}
+.user-name{font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.user-email{font-size:10px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.user-actions{display:flex;gap:5px;flex-shrink:0;}
+
+/* ===== ROLE PILLS ===== */
+.role-pill{display:inline-flex;align-items:center;gap:4px;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.rp-owner{background:rgba(180,50,255,0.12);color:var(--owner);border:1px solid rgba(180,50,255,0.35);}
+.rp-admin{background:rgba(255,171,0,0.1);color:var(--yel);border:1px solid rgba(255,171,0,0.25);}
+.rp-user{background:rgba(0,100,255,0.08);color:var(--acc);border:1px solid var(--bdr2);}
+
+/* ===== MODAL ===== */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:1000;display:none;align-items:flex-end;justify-content:center;padding:0;}
+.mo.open{display:flex;}
+@media(min-width:600px){.mo{align-items:center;padding:20px;}}
+.modal{
+  background:var(--bg3);border:1px solid var(--bdr2);
+  border-radius:16px 16px 0 0;
+  padding:24px 20px;width:100%;max-width:480px;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 -10px 60px rgba(0,0,0,0.5);
+  position:relative;
+  animation:slideUp 0.25s ease;
+}
+@media(min-width:600px){.modal{border-radius:12px;animation:fadeIn 0.2s ease;}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer;width:30px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{background:var(--bg4);color:var(--t1);}
+.modal-handle{width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:var(--f2);font-size:20px;font-weight:700;margin-bottom:18px;padding-right:30px;}
+.inp{width:100%;padding:9px 12px;background:var(--inp-bg);border:1.5px solid var(--bdr);border-radius:6px;color:var(--t1);font-size:13px;margin-bottom:10px;outline:none;transition:border-color 0.2s;font-family:var(--f1);}
+.inp:focus{border-color:var(--ibfa);}
+.inp::placeholder{color:var(--t3);}
+.lbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;display:block;}
+.ma{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
+.divider-or{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--t3);font-size:11px;}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--bdr);}
+.score-row{display:grid;grid-template-columns:1fr 36px 1fr;gap:8px;align-items:center;margin-bottom:14px;}
+.s-inp{text-align:center;font-family:var(--f2);font-size:26px;font-weight:700;}
+.s-col{text-align:center;font-family:var(--f2);font-size:22px;color:var(--t3);}
+.recaptcha-wrap{margin:8px 0;display:flex;justify-content:center;}
+
+/* ===== PROFILE ===== */
+.prof-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow);margin-bottom:16px;}
+.prof-av-w{position:relative;flex-shrink:0;}
+.prof-av{width:68px;height:68px;border-radius:50%;border:3px solid var(--ibfa);object-fit:cover;}
+.prof-av-edit{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.prof-av-w:hover .prof-av-edit{display:flex;}
+.prof-info{flex:1;min-width:0;}
+.prof-name{font-family:var(--f2);font-size:22px;font-weight:700;margin-bottom:4px;}
+.prof-email{color:var(--t2);font-size:12px;margin-top:4px;}
+
+/* ===== FILTER ===== */
+.filter-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;}
+.chip{padding:5px 12px;border-radius:3px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--bdr);background:var(--card);color:var(--t2);text-transform:uppercase;letter-spacing:0.5px;transition:all 0.15s;white-space:nowrap;}
+.chip.active,.chip:hover{border-color:var(--ibfa);color:var(--acc);background:rgba(0,50,200,0.07);}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--bdr2);border-radius:6px;padding:10px 18px;font-size:12px;font-weight:600;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,0.4);animation:toastIn 0.3s ease;white-space:nowrap;max-width:90vw;}
+.toast.success{border-color:var(--grn);color:var(--grn);}
+.toast.error{border-color:var(--red);color:var(--red);}
+.toast.info{border-color:var(--acc);color:var(--acc);}
+.toast.warn{border-color:var(--yel);color:var(--yel);}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ===== EMPTY ===== */
+.empty{text-align:center;padding:40px 16px;color:var(--t2);}
+.empty-ico{font-size:40px;margin-bottom:10px;opacity:0.4;}
+
+/* ===== BOTTOM NAV ===== */
+#mob-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:var(--nav-bg);border-top:1px solid var(--bdr);
+  z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,0.2);
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.mob-tabs{display:flex;}
+.mob-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:2px;padding:7px 4px;cursor:pointer;border:none;background:none;
+  color:var(--t2);font-size:9px;font-weight:600;letter-spacing:0.3px;
+  transition:color 0.15s;
+}
+.mob-tab-ico{font-size:19px;line-height:1;}
+.mob-tab.active{color:var(--ibfa-light);}
+
+@media(max-width:640px){
+  #mob-nav{display:block;}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0));}
+  .nav-tabs{display:none;}
+  /* Di mobile: sembunyikan W, D, L, GD, Pts - sisakan #, trend, Nation, P, Form */
+  .rank-table th:nth-child(5),.rank-table td:nth-child(5),
+  .rank-table th:nth-child(6),.rank-table td:nth-child(6),
+  .rank-table th:nth-child(7),.rank-table td:nth-child(7),
+  .rank-table th:nth-child(8),.rank-table td:nth-child(8),
+  .rank-table th:nth-child(9),.rank-table td:nth-child(9){display:none;}
+  .rank-table th,.rank-table td{padding:8px 5px;}
+  .rank-wrap{overflow-x:hidden;}
+  .form-wrap{gap:1px;}
+  .fb{width:14px;height:14px;font-size:7px;}
+  .rname{font-size:12px;}
+  .rcode{display:none;}
+.rgroup{font-size:9px;color:var(--t3);margin-left:4px;font-weight:600;letter-spacing:0.5px;}
+  /* Kolom mobile fixed width */
+  .rank-table{table-layout:auto;}
+  .rank-table th:nth-child(1),.rank-table td:nth-child(1){width:22px;padding:8px 3px;}
+  .rank-table th:nth-child(2),.rank-table td:nth-child(2){width:28px;padding:8px 3px;}
+  .rank-table th:nth-child(4),.rank-table td:nth-child(4){width:22px;text-align:center;padding:8px 3px;}
+  .rank-table th:nth-child(10),.rank-table td:nth-child(10){width:56px;text-align:center;}
+  .match-grid{grid-template-columns:1fr 80px 1fr;}
+  .team-em{font-size:26px;}
+  .score-num{font-size:28px;}
+  .nations-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));}
+  .hero{padding:28px 14px 24px;}
+  .hero-stat{padding:8px 14px;}
+}
+
+/* ===== ANNOUNCEMENT ===== */
+.ann-card{background:linear-gradient(135deg,rgba(0,50,200,0.15),rgba(0,150,255,0.08));border:1px solid var(--bdr2);border-radius:8px;padding:14px 16px;margin-bottom:12px;}
+.ann-card.pinned{border-color:var(--yel);background:linear-gradient(135deg,rgba(255,171,0,0.08),rgba(255,171,0,0.03));}
+.ann-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.ann-pin{font-size:12px;color:var(--yel);}
+.ann-title{font-weight:700;font-size:14px;flex:1;}
+.ann-del{background:none;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;}
+.ann-del:hover{color:var(--red);}
+.ann-body{font-size:13px;color:var(--t2);line-height:1.5;}
+.ann-meta{font-size:11px;color:var(--t3);margin-top:6px;}
+
+/* ===== REACTION ===== */
+.chat-reactions{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
+.react-btn{background:var(--bg3);border:1px solid var(--bdr);border-radius:20px;padding:2px 8px;font-size:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:3px;}
+.react-btn:hover,.react-btn.active{border-color:var(--ibfa);background:rgba(0,50,200,0.1);}
+.react-btn.active{color:var(--acc);}
+.react-count{font-size:11px;font-weight:600;}
+.react-add{background:none;border:1px solid var(--bdr);border-radius:20px;padding:2px 8px;font-size:12px;cursor:pointer;color:var(--t3);}
+.react-add:hover{border-color:var(--bdr2);color:var(--t1);}
+.react-picker{position:fixed;background:var(--bg3);border:1px solid var(--bdr2);border-radius:12px;padding:10px 12px;display:flex;gap:8px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.react-picker-btn{font-size:20px;cursor:pointer;border:none;background:none;border-radius:6px;padding:2px 4px;transition:transform 0.1s;}
+.react-picker-btn:hover{transform:scale(1.3);}
+.chat-msg-wrap{position:relative;display:flex;flex-direction:column;max-width:82%;}.chat-msg.me .chat-msg-wrap{align-items:flex-end;}
+
+/* ===== VIEW PROFILE MODAL ===== */
+.view-prof-av{width:70px;height:70px;border-radius:50%;border:3px solid var(--ibfa);object-fit:cover;margin:0 auto 10px;display:block;}
+.view-prof-name{font-family:var(--f2);font-size:22px;font-weight:700;text-align:center;margin-bottom:4px;}
+.view-prof-role{text-align:center;margin-bottom:8px;}
+.view-prof-email{text-align:center;font-size:13px;color:var(--t2);margin-bottom:14px;}
+.view-prof-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.view-stat{background:var(--bg4);border-radius:6px;padding:10px;text-align:center;}
+.view-stat-n{font-family:var(--f2);font-size:20px;font-weight:700;color:var(--acc);}
+.view-stat-l{font-size:11px;color:var(--t2);margin-top:2px;}
+
+/* ===== MENTION ===== */
+.mention{color:var(--acc);font-weight:600;cursor:pointer;}
+.mention:hover{text-decoration:underline;}
+.mention-dropdown{position:absolute;bottom:50px;left:0;right:0;background:var(--bg3);border:1px solid var(--bdr2);border-radius:8px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-height:160px;overflow-y:auto;}
+.mention-item{padding:8px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;}
+.mention-item:hover{background:var(--bg4);}
+.mention-av{width:24px;height:24px;border-radius:50%;object-fit:cover;}
+.chat-input-wrap{position:relative;flex:1;}
+
+/* ===== COMPETITION / EVENT ===== */
+.event-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:6px;background:var(--bg4);border:1px solid var(--bdr2);margin-bottom:16px;}
+.event-logo{width:32px;height:32px;object-fit:contain;border-radius:4px;}
+.event-name{font-family:var(--f2);font-size:15px;font-weight:700;}
+.event-phase{font-size:11px;color:var(--t2);margin-left:4px;}
+
+/* ===== GROUP STAGE ===== */
+.groups-wrap{display:flex;flex-direction:column;gap:16px;}
+.group-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;}
+.group-title{background:var(--bg4);padding:10px 14px;font-family:var(--f2);font-size:14px;font-weight:700;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;}
+.group-table{width:100%;border-collapse:collapse;}
+.group-table th{padding:6px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);background:var(--bg4);border-bottom:1px solid var(--bdr);}
+.group-table td{padding:8px;font-size:12px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+.group-table tr:last-child td{border-bottom:none;}
+.group-table tr.qualify td{background:rgba(0,200,83,0.04);}
+.qualify-bar{width:3px;height:100%;background:var(--grn);position:absolute;left:0;top:0;}
+
+/* ===== KNOCKOUT BRACKET ===== */
+.bracket-wrap{overflow-x:auto;padding:8px 0;}
+.bracket{display:flex;gap:0;align-items:center;}
+.bracket-round{display:flex;flex-direction:column;min-width:140px;padding:0 6px;}
+.bracket-round-title{text-align:center;font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--bdr);}
+.bracket-slot{display:flex;flex-direction:column;justify-content:center;flex:1;position:relative;}
+.bracket-match{background:var(--card);border:1px solid var(--bdr);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color 0.15s;margin:4px 0;}
+.bracket-match:hover{border-color:var(--bdr2);}
+.bracket-team{padding:5px 8px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;gap:4px;min-height:28px;}
+.bracket-team:first-child{border-bottom:1px solid var(--bdr);}
+.bracket-team.winner{background:rgba(0,100,255,0.1);color:var(--acc);}
+.bracket-score{font-family:var(--f2);font-size:12px;font-weight:700;min-width:14px;text-align:center;}
+.bracket-tbd{padding:5px 8px;font-size:11px;color:var(--t3);font-style:italic;min-height:28px;display:flex;align-items:center;}
+.bracket-assign-btn{display:block;width:100%;padding:4px;background:var(--bg4);border:1px dashed var(--bdr2);border-radius:4px;color:var(--t3);font-size:10px;cursor:pointer;text-align:center;margin-top:2px;}
+.bracket-assign-btn:hover{color:var(--acc);border-color:var(--acc);}
+
+/* ===== HEAD TO HEAD ===== */
+.h2h-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px;}
+.h2h-selector{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.h2h-vs{font-family:var(--f2);font-size:18px;font-weight:700;color:var(--t3);}
+.h2h-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.h2h-stat{text-align:center;background:var(--bg4);border-radius:6px;padding:10px;}
+.h2h-stat-n{font-family:var(--f2);font-size:22px;font-weight:700;}
+.h2h-stat-l{font-size:10px;color:var(--t2);margin-top:2px;}
+.h2h-bar{height:8px;border-radius:4px;background:var(--bdr);overflow:hidden;margin-bottom:8px;display:flex;}
+.h2h-bar-a{background:var(--ibfa);transition:width 0.5s;}
+.h2h-bar-b{background:var(--red);transition:width 0.5s;}
+.h2h-predict{background:var(--bg4);border-radius:6px;padding:12px;text-align:center;}
+.h2h-predict-title{font-size:11px;color:var(--t2);margin-bottom:8px;font-weight:600;}
+.h2h-predict-bar{display:flex;height:24px;border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.h2h-pred-a{background:var(--ibfa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:width 0.5s;}
+.h2h-pred-draw{background:var(--t3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:width 0.5s;}
+.h2h-pred-b{background:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:width 0.5s;}
+
+/* ===== TOP SCORER ===== */
+.scorer-list{display:flex;flex-direction:column;gap:8px;}
+.scorer-item{background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.scorer-rank{font-family:var(--f2);font-size:16px;font-weight:700;min-width:24px;text-align:center;}
+.scorer-flag{font-size:20px;}
+.scorer-info{flex:1;}
+.scorer-name{font-weight:700;font-size:13px;}
+.scorer-nation{font-size:11px;color:var(--t2);}
+.scorer-goals{font-family:var(--f2);font-size:22px;font-weight:700;color:var(--acc);}
+.scorer-goals-l{font-size:10px;color:var(--t2);text-align:center;}
+
+/* ===== MATCH REPORT ===== */
+.report-wrap{background:var(--bg4);border-radius:6px;padding:12px 14px;margin-top:10px;border:1px solid var(--bdr);}
+.report-title{font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.report-text{font-size:12px;color:var(--t1);line-height:1.6;}
+.report-edit{font-size:11px;color:var(--t3);cursor:pointer;margin-left:8px;}
+.report-edit:hover{color:var(--acc);}
+
+/* ===== CHAT REPLY ===== */
+.chat-reply-preview{background:rgba(0,0,0,0.15);border-left:3px solid var(--acc);border-radius:0 6px 6px 0;padding:6px 10px;margin-bottom:4px;font-size:11px;cursor:pointer;}
+.chat-reply-name{color:var(--acc);font-weight:700;margin-bottom:2px;}
+.chat-reply-text{color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;}
+.reply-bar{background:var(--bg4);border-top:1px solid var(--bdr);padding:6px 12px;display:flex;align-items:center;gap:8px;font-size:12px;}
+.reply-bar-info{flex:1;}
+.reply-bar-name{color:var(--acc);font-weight:700;font-size:11px;}
+.reply-bar-text{color:var(--t2);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;}
+.reply-cancel{background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:0 4px;}
+.reply-cancel:hover{color:var(--red);}
+
+
+/* WO badge */
+.fw{background:#7c3aed;color:#fff;border-radius:3px;padding:2px 6px;font-size:10px;font-weight:700;}
+
+/* ===== BAN USER ===== */
+.banned-badge{background:rgba(255,23,68,0.1);color:var(--red);border:1px solid rgba(255,23,68,0.3);border-radius:3px;padding:2px 7px;font-size:10px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" onclick="showPage('ranking');return false;">
+      <div class="ibfa-logo">IBFA<sup>®</sup></div>
+    </a>
+    <div class="nav-tabs" id="nav-tabs">
+      <button class="nav-tab active" data-page="ranking" onclick="showPage('ranking')">🏆 Ranking</button>
+      <button class="nav-tab" data-page="matches" onclick="showPage('matches')">⚽ Matches</button>
+      <button class="nav-tab" data-page="nations" onclick="showPage('nations')">🌍 Nations</button>
+      <button class="nav-tab" data-page="competition" onclick="showPage('competition')">🏆 Competition</button>
+      <button class="nav-tab" data-page="h2h" onclick="showPage('h2h')">⚔️ H2H</button>
+      <button class="nav-tab" data-page="topscorer" onclick="showPage('topscorer')">👟 Scorers</button>
+      <button class="nav-tab" data-page="chat" onclick="showPage('chat')">💬 Chat</button>
+      <button class="nav-tab" data-page="admin" id="admin-tab" style="display:none" onclick="showPage('admin')">⚙ Admin</button>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+      <div id="nav-auth">
+        <button class="nav-btn" onclick="openLogin()">Login</button>
+        <button class="nav-btn primary" onclick="openRegister()">Daftar</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">🌐 Brookhaven International Football Association</div>
+    <h1>IBFA <span class="accent">Ranking</span><br/>& Match Center</h1>
+    <p>Official rankings, live scores & match center for the Brookhaven Football Universe</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-n" id="s-nations">—</div>
+        <div class="hero-stat-l">Nations</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n" id="s-matches">—</div>
+        <div class="hero-stat-l">Matches</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n" id="s-live">—</div>
+        <div class="hero-stat-l">Live Now</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGES -->
+<div class="container">
+
+  <!-- RANKING -->
+  <div id="page-ranking" class="page active section">
+    <div id="announcements-wrap" style="margin-bottom:16px"></div>
+    <div class="section-hd">
+      <div class="section-title">World Ranking</div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <div class="filter-row" style="margin:0">
+          <div class="chip active" onclick="filterRank('all',this)">All</div>
+          <div class="chip" onclick="filterRank('top10',this)">Top 10</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="exportRanking()">📸 Export</button>
+      </div>
+    </div>
+    <div class="rank-wrap" id="ranking-wrap">
+      <table class="rank-table" id="ranking-table">
+        <thead>
+          <tr>
+            <th>#</th><th>△▽</th><th>Nation</th>
+            <th style="text-align:center">P</th><th style="text-align:center">W</th>
+            <th style="text-align:center">D</th><th style="text-align:center">L</th>
+            <th style="text-align:center">GD</th><th style="text-align:center">Pts</th>
+            <th style="text-align:center">Form</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MATCHES -->
+  <div id="page-matches" class="page section">
+    <div class="section-hd">
+      <div class="section-title">Match Schedule</div>
+      <div class="filter-row" style="margin:0" id="match-filters">
+        <div class="chip active" onclick="filterMatch('all',this)">All</div>
+        <div class="chip" onclick="filterMatch('upcoming',this)">Upcoming</div>
+        <div class="chip" onclick="filterMatch('live',this)">🔴 Live</div>
+        <div class="chip" onclick="filterMatch('done',this)">Finished</div>
+      </div>
+    </div>
+    <div class="matches-list" id="matches-list"></div>
+  </div>
+
+  <!-- NATIONS -->
+  <div id="page-nations" class="page section">
+    <div class="section-hd">
+      <div class="section-title">Nations</div>
+      <div id="nations-add-btn" style="display:none">
+        <button class="btn btn-ibfa btn-sm" onclick="openMo('mo-nation')">➕ Add Nation</button>
+      </div>
+    </div>
+    <div class="nations-grid" id="nations-grid"></div>
+  </div>
+
+  <!-- COMPETITION -->
+  <div id="page-competition" class="page section">
+    <div class="section-hd">
+      <div class="section-title">Competition</div>
+      <div id="comp-admin-btns" style="display:none;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-ibfa btn-sm" id="comp-new-btn" onclick="openNewComp()">➕ New Competition</button>
+        <button class="btn btn-danger btn-sm" id="comp-del-btn" style="display:none" onclick="deleteCompetition()">🗑 Hapus Event</button>
+      </div>
+    </div>
+    <div id="comp-event-badge"></div>
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap" id="comp-tabs">
+      <div class="chip active" onclick="showCompTab('groups',this)">👥 Group Stage</div>
+      <div class="chip" onclick="showCompTab('knockout',this)">🏆 Knockout</div>
+    </div>
+    <div id="comp-groups"></div>
+    <div id="comp-knockout" style="display:none"></div>
+  </div>
+
+  <!-- HEAD TO HEAD -->
+  <div id="page-h2h" class="page section">
+    <div class="section-hd"><div class="section-title">Head to Head</div></div>
+    <div class="h2h-wrap">
+      <div class="h2h-selector">
+        <select id="h2h-a" class="inp" style="flex:1" onchange="renderH2H()"><option value="">Pilih negara A</option></select>
+        <div class="h2h-vs">VS</div>
+        <select id="h2h-b" class="inp" style="flex:1" onchange="renderH2H()"><option value="">Pilih negara B</option></select>
+      </div>
+      <div id="h2h-result"></div>
+    </div>
+  </div>
+
+  <!-- TOP SCORER -->
+  <div id="page-topscorer" class="page section">
+    <div class="section-hd">
+      <div class="section-title">Top Scorer</div>
+      <div id="scorer-admin-btn" style="display:none">
+        <button class="btn btn-ibfa btn-sm" onclick="openMo('mo-scorer')">➕ Add Scorer</button>
+      </div>
+    </div>
+    <div class="scorer-list" id="scorer-list">
+      <div class="empty"><div class="empty-ico">⚽</div><div style="color:var(--t2)">Belum ada data scorer</div></div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+
+  <div id="page-chat" class="page section">
+    <div class="section-hd"><div class="section-title">Global Chat</div></div>
+    <div class="chat-wrap">
+      <div class="chat-header">
+        <span class="chat-header-ico">💬</span>
+        <div class="chat-header-info">
+          <div class="chat-header-title">IBFA Global Chat</div>
+          <div class="chat-header-sub">Obrolan semua anggota IBFA</div>
+        </div>
+        <div class="chat-online"><div class="chat-online-dot"></div><span id="chat-online-count">—</span> online</div>
+      </div>
+      <div class="chat-msgs" id="chat-msgs">
+        <div class="empty"><div class="empty-ico">💬</div><div style="color:var(--t2);font-weight:600">Belum ada pesan</div></div>
+      </div>
+      <div id="reply-bar" style="display:none" class="reply-bar">
+        <div class="reply-bar-info">
+          <div class="reply-bar-name" id="reply-bar-name"></div>
+          <div class="reply-bar-text" id="reply-bar-text"></div>
+        </div>
+        <button class="reply-cancel" onclick="cancelReply()">✕</button>
+      </div>
+      <div class="chat-input-area" id="chat-input-area">
+        <div class="chat-login-msg">Login untuk ikut chat — <a onclick="openLogin()">Login sekarang</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="page-admin" class="page section">
+    <div class="section-hd"><div class="section-title">Admin Panel</div></div>
+    <div class="admin-wrap">
+      <div class="admin-badge">👑 Admin Mode</div>
+      <div class="admin-grid">
+        <div class="adm-card" onclick="openMo('mo-nation')"><div class="adm-ico">🌍</div><div class="adm-title">Add Nation</div><div class="adm-desc">Tambah negara baru</div></div>
+        <div class="adm-card" onclick="openAddMatch()"><div class="adm-ico">⚽</div><div class="adm-title">Schedule Match</div><div class="adm-desc">Jadwalkan pertandingan</div></div>
+        <div class="adm-card" onclick="confirmReset()"><div class="adm-ico">🔄</div><div class="adm-title">Reset Season</div><div class="adm-desc">Reset semua poin ke 0</div></div>
+        <div class="adm-card" onclick="openMo('mo-ann')"><div class="adm-ico">📢</div><div class="adm-title">Announcement</div><div class="adm-desc">Post pengumuman ke semua user</div></div>
+        <div class="adm-card" onclick="showPage('matches')"><div class="adm-ico">📊</div><div class="adm-title">Manage Matches</div><div class="adm-desc">Edit skor & status</div></div>
+        <div class="adm-card" onclick="openMo('mo-comp')"><div class="adm-ico">🏆</div><div class="adm-title">New Competition</div><div class="adm-desc">Buat grup stage / knockout</div></div>
+        <div class="adm-card" onclick="openMo('mo-event-logo')"><div class="adm-ico">🎨</div><div class="adm-title">Event Logo</div><div class="adm-desc">Upload logo kompetisi</div></div>
+        <div class="adm-card" onclick="openAddScorer()"><div class="adm-ico">👟</div><div class="adm-title">Add Scorer</div><div class="adm-desc">Tambah data top scorer</div></div>
+      </div>
+    </div>
+    <div class="owner-wrap" id="owner-user-mgmt" style="display:none;margin-top:16px">
+      <div class="owner-badge">💎 Owner — User Management</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;">
+        <div style="font-size:12px;color:var(--t2)">Kelola role semua pengguna terdaftar</div>
+        <button class="btn btn-outline btn-sm" onclick="loadAllUsers()">🔄 Refresh</button>
+      </div>
+      <div class="user-list" id="user-list">
+        <div class="empty"><div class="empty-ico">👥</div><div style="color:var(--t2)">Klik Refresh untuk memuat user</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="page-profile" class="page section">
+    <div class="section-hd"><div class="section-title">My Profile</div></div>
+    <div class="prof-card" id="prof-card">
+      <div style="color:var(--t2);font-size:13px">Login untuk melihat profil</div>
+    </div>
+    <div id="prof-edit-wrap" style="display:none;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px;box-shadow:var(--shadow);">
+      <div class="section-title" style="font-size:15px;margin-bottom:14px">Edit Profile</div>
+      <label class="lbl">Display Name</label>
+      <input id="prof-name" class="inp" placeholder="Nama tampilan kamu"/>
+      <div style="margin-top:4px"><button class="btn btn-ibfa" onclick="saveProfile()">💾 Simpan</button></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- BOTTOM NAV -->
+<div id="mob-nav">
+  <div class="mob-tabs">
+    <button class="mob-tab active" data-page="ranking" onclick="showPage('ranking')"><span class="mob-tab-ico">🏆</span>Ranking</button>
+    <button class="mob-tab" data-page="matches" onclick="showPage('matches')"><span class="mob-tab-ico">⚽</span>Matches</button>
+    <button class="mob-tab" data-page="nations" onclick="showPage('nations')"><span class="mob-tab-ico">🌍</span>Nations</button>
+    <button class="mob-tab" data-page="competition" onclick="showPage('competition')"><span class="mob-tab-ico">🏆</span>Cup</button>
+    <button class="mob-tab" data-page="chat" onclick="showPage('chat')"><span class="mob-tab-ico">💬</span>Chat</button>
+    <button class="mob-tab" data-page="admin" id="mob-admin-tab" style="display:none" onclick="showPage('admin')"><span class="mob-tab-ico">⚙</span>Admin</button>
+    <button class="mob-tab" data-page="profile" onclick="showPage('profile')"><span class="mob-tab-ico">👤</span>Profile</button>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Login -->
+<div class="mo" id="mo-login" onclick="if(event.target===this)closeMo('mo-login')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-login')">✕</button>
+    <div class="modal-title">🔐 Login</div>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:10px" onclick="loginGoogle()">
+      <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.32-8.16 2.32-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div class="divider-or">atau</div>
+    <label class="lbl">Email</label>
+    <input id="li-email" class="inp" type="email" placeholder="email@contoh.com"/>
+    <label class="lbl">Password</label>
+    <input id="li-pass" class="inp" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')loginEmail()"/>
+    <div class="recaptcha-wrap"><div id="recaptcha-login"></div></div>
+    <button class="btn btn-ibfa" style="width:100%;justify-content:center;margin-top:4px" onclick="loginEmail()">Login</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--t2)">Belum punya akun? <a href="#" style="color:var(--acc)" onclick="openRegister()">Daftar</a></p>
+  </div>
+</div>
+
+<!-- Register -->
+<div class="mo" id="mo-register" onclick="if(event.target===this)closeMo('mo-register')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-register')">✕</button>
+    <div class="modal-title">✨ Buat Akun</div>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:10px" onclick="loginGoogle()">
+      <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.32-8.16 2.32-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Sign up with Google
+    </button>
+    <div class="divider-or">atau</div>
+    <label class="lbl">Display Name</label>
+    <input id="re-name" class="inp" placeholder="Nama kamu"/>
+    <label class="lbl">Email</label>
+    <input id="re-email" class="inp" type="email" placeholder="email@contoh.com"/>
+    <label class="lbl">Password</label>
+    <input id="re-pass" class="inp" type="password" placeholder="Min 6 karakter" onkeydown="if(event.key==='Enter')registerEmail()"/>
+    <div class="recaptcha-wrap"><div id="recaptcha-register"></div></div>
+    <button class="btn btn-ibfa" style="width:100%;justify-content:center;margin-top:4px" onclick="registerEmail()">Buat Akun</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--t2)">Sudah punya akun? <a href="#" style="color:var(--acc)" onclick="openLogin()">Login</a></p>
+  </div>
+</div>
+
+<!-- Add Nation -->
+<div class="mo" id="mo-nation" onclick="if(event.target===this)closeMo('mo-nation')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-nation')">✕</button>
+    <div class="modal-title">🌍 Add Nation</div>
+    <label class="lbl">Nama Negara</label><input id="nat-name" class="inp" placeholder="Indonesia"/>
+    <label class="lbl">Kode (3 huruf)</label><input id="nat-code" class="inp" placeholder="IDN" maxlength="3" style="text-transform:uppercase"/>
+    <label class="lbl">Flag Emoji</label><input id="nat-flag" class="inp" placeholder="🇮🇩"/>
+    <label class="lbl">Grup / Konfederasi</label><input id="nat-group" class="inp" placeholder="ASEAN, UEFA..."/>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-nation')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveNation()">Tambah ➕</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Nation -->
+<div class="mo" id="mo-edit-nation" onclick="if(event.target===this)closeMo('mo-edit-nation')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-edit-nation')">✕</button>
+    <div class="modal-title">✏️ Edit Nation</div>
+    <input type="hidden" id="en-id"/>
+    <label class="lbl">Nama Negara</label><input id="en-name" class="inp" placeholder="Indonesia"/>
+    <label class="lbl">Kode (3 huruf)</label><input id="en-code" class="inp" placeholder="IDN" maxlength="3" style="text-transform:uppercase"/>
+    <label class="lbl">Flag Emoji</label><input id="en-flag" class="inp" placeholder="🇮🇩"/>
+    <label class="lbl">Grup / Konfederasi</label><input id="en-group" class="inp" placeholder="ASEAN, UEFA..."/>
+    <label class="lbl">Gambar (URL)</label>
+    <input id="en-img-url" class="inp" placeholder="https://... (URL gambar)" oninput="previewNatImg(this.value)"/>
+    <div style="text-align:center;margin:-4px 0 8px;color:var(--t3);font-size:10px">— atau upload file —</div>
+    <input type="file" id="en-img-file" accept="image/*" class="inp" style="padding:6px" onchange="previewNatFile(this)"/>
+    <div id="en-img-preview" style="text-align:center;margin-bottom:10px;display:none">
+      <img id="en-img-prev-img" src="" style="max-height:90px;border-radius:6px;border:1px solid var(--bdr)"/>
+    </div>
+    <div class="ma">
+      <button class="btn btn-danger btn-sm" onclick="deleteNation()">🗑 Hapus</button>
+      <button class="btn btn-outline" onclick="closeMo('mo-edit-nation')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveEditNation()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Match -->
+<div class="mo" id="mo-match" onclick="if(event.target===this)closeMo('mo-match')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-match')">✕</button>
+    <div class="modal-title">⚽ Schedule Match</div>
+    <label class="lbl">Tim A</label><select id="mat-a" class="inp"></select>
+    <label class="lbl">Tim B</label><select id="mat-b" class="inp"></select>
+    <label class="lbl">Tanggal & Waktu</label><input id="mat-date" class="inp" type="datetime-local"/>
+    <label class="lbl">Kompetisi</label><input id="mat-comp" class="inp" placeholder="IBFA World Cup — Group A"/>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-match')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveMatch()">Jadwalkan ⚽</button>
+    </div>
+  </div>
+</div>
+
+<!-- Score Input -->
+<div class="mo" id="mo-score" onclick="if(event.target===this)closeMo('mo-score')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeMo('mo-score')">✕</button>
+    <div class="modal-title">📊 Input Skor</div>
+    <div id="score-teams" style="text-align:center;font-family:var(--f2);font-size:15px;font-weight:700;margin-bottom:14px;color:var(--t2)"></div>
+    <div class="score-row">
+      <input id="sc-a" class="inp s-inp" type="number" min="0" placeholder="0"/>
+      <div class="s-col">:</div>
+      <input id="sc-b" class="inp s-inp" type="number" min="0" placeholder="0"/>
+    </div>
+    <input type="hidden" id="sc-id"/>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-score')">Batal</button>
+      <button class="btn btn-ibfa" onclick="submitScore()">✅ Selesaikan</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- View Profile -->
+<div class="mo" id="mo-view-profile" onclick="if(event.target===this)closeMo('mo-view-profile')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-view-profile')">✕</button>
+    <div class="modal-title">👤 Profile</div>
+    <div id="view-prof-content"></div>
+  </div>
+</div>
+
+<!-- Announcement -->
+<div class="mo" id="mo-ann" onclick="if(event.target===this)closeMo('mo-ann')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-ann')">✕</button>
+    <div class="modal-title">📢 Announcement</div>
+    <label class="lbl">Judul</label>
+    <input id="ann-title-inp" class="inp" placeholder="Judul pengumuman"/>
+    <label class="lbl">Isi</label>
+    <textarea id="ann-body-inp" class="inp" placeholder="Isi pengumuman..." rows="4" style="resize:vertical"></textarea>
+    <label class="lbl" style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <input type="checkbox" id="ann-pin-inp"/> Pin pengumuman ini
+    </label>
+    <label class="lbl">Expired (opsional)</label>
+    <input id="ann-expire-inp" class="inp" type="datetime-local" style="margin-bottom:4px"/>
+    <div style="font-size:11px;color:var(--t3);margin-bottom:12px">Kosongkan = auto hilang setelah 3 hari</div>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-ann')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveAnnouncement()">📢 Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- Competition Modal -->
+<div class="mo" id="mo-comp" onclick="if(event.target===this)closeMo('mo-comp')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-comp')">✕</button>
+    <div class="modal-title" id="comp-modal-title">🏆 New Competition</div>
+    <label class="lbl">Nama Kompetisi</label>
+    <input id="comp-name-inp" class="inp" placeholder="IBFA World Cup 2026"/>
+    <label class="lbl">Tipe</label>
+    <select id="comp-type-inp" class="inp" onchange="onCompTypeChange()">
+      <option value="groups+knockout">Group Stage + Knockout</option>
+      <option value="groups">Group Stage Only</option>
+      <option value="knockout">Knockout Only</option>
+    </select>
+    <div id="comp-group-settings">
+      <label class="lbl">Jumlah Grup</label>
+      <select id="comp-groups-inp" class="inp">
+        <option value="2">2 Grup</option>
+        <option value="4">4 Grup</option>
+        <option value="8">8 Grup</option>
+      </select>
+      <label class="lbl">Tim lolos per grup</label>
+      <select id="comp-qualify-inp" class="inp">
+        <option value="2">2 Tim</option>
+        <option value="1">1 Tim</option>
+      </select>
+    </div>
+    <div id="comp-knockout-settings" style="display:none">
+      <label class="lbl">Jumlah Tim di Knockout</label>
+      <select id="comp-ko-teams-inp" class="inp">
+        <option value="4">4 Tim (Semi Final)</option>
+        <option value="8">8 Tim (Quarter Final)</option>
+        <option value="16">16 Tim (Round of 16)</option>
+        <option value="32">32 Tim (Round of 32)</option>
+      </select>
+    </div>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-comp')">Batal</button>
+      <button class="btn btn-ibfa" id="comp-save-btn" onclick="saveCompetition()">🏆 Buat</button>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Nation to Bracket Modal -->
+<div class="mo" id="mo-assign" onclick="if(event.target===this)closeMo('mo-assign')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-assign')">✕</button>
+    <div class="modal-title">⚽ Pilih Negara</div>
+    <input id="assign-search" class="inp" placeholder="Cari negara..." oninput="filterAssignList(this.value)" style="margin-bottom:10px"/>
+    <div id="assign-nation-list" style="max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+</div>
+
+<!-- Event Logo Modal -->
+<div class="mo" id="mo-event-logo" onclick="if(event.target===this)closeMo('mo-event-logo')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-event-logo')">✕</button>
+    <div class="modal-title">🎨 Event Logo</div>
+    <label class="lbl">Nama Event</label>
+    <input id="evlogo-name" class="inp" placeholder="IBFA World Cup"/>
+    <label class="lbl">Upload dari Galeri</label>
+    <input type="file" id="evlogo-file" accept="image/*" style="display:none" onchange="onEvLogoFile(this)"/>
+    <button class="btn btn-outline" style="width:100%;margin-bottom:8px" onclick="document.getElementById('evlogo-file').click()">📁 Pilih dari Galeri</button>
+    <label class="lbl">Atau URL Logo</label>
+    <input id="evlogo-url" class="inp" placeholder="https://..." oninput="previewEvLogo(this.value)"/>
+    <div id="evlogo-preview" style="text-align:center;margin:10px 0;display:none">
+      <img id="evlogo-img" src="" style="max-height:80px;border-radius:6px;border:1px solid var(--bdr)"/>
+    </div>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-event-logo')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveEventLogo()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Top Scorer Modal -->
+<div class="mo" id="mo-scorer" onclick="if(event.target===this)closeMo('mo-scorer')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-scorer')">✕</button>
+    <div class="modal-title">👟 Add/Edit Scorer</div>
+    <input type="hidden" id="scorer-id-inp"/>
+    <label class="lbl">Nama Pemain</label>
+    <input id="scorer-name-inp" class="inp" placeholder="Nama pemain"/>
+    <label class="lbl">Negara</label>
+    <select id="scorer-nation-inp" class="inp"></select>
+    <label class="lbl">Jumlah Gol</label>
+    <input id="scorer-goals-inp" class="inp" type="number" min="0" placeholder="0"/>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-scorer')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveScorer()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Match Report Modal -->
+<div class="mo" id="mo-report" onclick="if(event.target===this)closeMo('mo-report')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMo('mo-report')">✕</button>
+    <div class="modal-title">📝 Match Report</div>
+    <input type="hidden" id="report-match-id"/>
+    <label class="lbl">Laporan Pertandingan</label>
+    <textarea id="report-text-inp" class="inp" rows="5" placeholder="Ceritakan jalannya pertandingan..." style="resize:vertical"></textarea>
+    <div class="ma">
+      <button class="btn btn-outline" onclick="closeMo('mo-report')">Batal</button>
+      <button class="btn btn-ibfa" onclick="saveReport()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FIREBASE ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const fb = firebase.initializeApp({
+  apiKey:"AIzaSyBfn6I8YdHNXTTSEKGwzOHG4dolNeY8zYA",
+  authDomain:"ibfa-af605.firebaseapp.com",
+  projectId:"ibfa-af605",
+  storageBucket:"ibfa-af605.firebasestorage.app",
+  messagingSenderId:"377737886863",
+  appId:"1:377737886863:web:e0e5a132a152abf9b684fa",
+  databaseURL:"https://ibfa-af605-default-rtdb.asia-southeast1.firebasedatabase.app"
+});
+const auth = fb.auth();
+const db = fb.firestore();
+const FS = firebase.firestore;
+
+// CLOUDINARY
+const CLOUD='dmm4bnwi2', PRESET='bytehub';
+async function uploadImg(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', PRESET);
+  fd.append('folder', 'ibfa');
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,{method:'POST',body:fd});
+  if (!r.ok) throw new Error('Upload failed');
+  return (await r.json()).secure_url;
+}
+
+// ===== CONFIG =====
+const OWNER_EMAIL = 'trycarparking@gmail.com';
+
+// ===== SECURITY =====
+function sanitize(s) {
+  if (typeof s !== 'string') return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;').replace(/\//g,'&#x2F;').trim();
+}
+const _spam={};
+function checkSpam(key,ms=5000) {
+  const now=Date.now();
+  if (_spam[key]&&now-_spam[key]<ms){const l=Math.ceil((ms-(now-_spam[key]))/1000);toast(`Tunggu ${l}s lagi!`,'warn');return false;}
+  _spam[key]=now;return true;
+}
+function validateText(t,max=300) {
+  if (!t||!t.trim()) return false;
+  if (t.length>max) return false;
+  if (/(.)1{19,}/.test(t)) return false;
+  return true;
+}
+
+
+
+// ===== STATE =====
+let cu=null, cuData={}, isAdmin=false, isOwner=false;
+let nations=[], matches=[];
+let chatUnsub=null;
+
+// ===== THEME =====
+function toggleTheme() {
+  const h = document.documentElement;
+  const t = h.dataset.theme==='dark' ? 'light' : 'dark';
+  h.dataset.theme = t;
+  localStorage.setItem('ibfa_theme', t);
+  document.getElementById('theme-btn').textContent = t==='dark' ? '🌙' : '☀️';
+}
+(function(){
+  const s = localStorage.getItem('ibfa_theme')||'dark';
+  document.documentElement.dataset.theme = s;
+  document.getElementById('theme-btn').textContent = s==='dark' ? '🌙' : '☀️';
+})();
+
+// ===== NAVIGATION =====
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const t = document.getElementById('page-'+page);
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.nav-tab,.mob-tab').forEach(b => b.classList.toggle('active', b.dataset.page===page));
+  if (page==='profile') renderProfile();
+  if (page==='chat') initChat();
+  if (page==='h2h') initH2H();
+  if (page==='topscorer') loadTopScorers();
+  if (page==='competition') loadCompetition();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== MODAL =====
+function openMo(id) { document.getElementById(id)?.classList.add('open'); }
+function closeMo(id) { document.getElementById(id)?.classList.remove('open'); }
+function openLogin() { closeMo('mo-register'); openMo('mo-login'); }
+function openRegister() { closeMo('mo-login'); openMo('mo-register'); }
+
+// ===== TOAST =====
+function toast(msg, type='info') {
+  document.querySelectorAll('.toast').forEach(e=>e.remove());
+  const t = document.createElement('div');
+  t.className=`toast ${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+
+// ===== COMPETITION =====
+let currentComp = null;
+let assignTarget = null; // {type:'round'|'group', roundIdx, matchIdx, slot:'A'|'B', groupIdx}
+
+function onCompTypeChange() {
+  const t = document.getElementById('comp-type-inp').value;
+  document.getElementById('comp-group-settings').style.display = t==='knockout'?'none':'block';
+  document.getElementById('comp-knockout-settings').style.display = t==='groups'?'none':'block';
+}
+
+function openNewComp() {
+  if (currentComp) {
+    if (!confirm('Sudah ada event aktif. Buat event baru akan mengganti yang lama. Lanjut?')) return;
+  }
+  document.getElementById('comp-modal-title').textContent = '🏆 New Competition';
+  document.getElementById('comp-save-btn').textContent = '🏆 Buat';
+  document.getElementById('comp-name-inp').value = '';
+  openMo('mo-comp');
+}
+
+async function loadCompetition() {
+  const snap = await db.collection('ibfa_competitions').orderBy('createdAt','desc').limit(1).get();
+  const adminBtns = document.getElementById('comp-admin-btns');
+  if (isAdmin && adminBtns) adminBtns.style.display = 'flex';
+  if (snap.empty) { currentComp = null; renderNoComp(); return; }
+  currentComp = { id: snap.docs[0].id, ...snap.docs[0].data() };
+  renderCompetition();
+  // Show delete btn only if comp exists
+  const delBtn = document.getElementById('comp-del-btn');
+  if (delBtn) delBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+}
+
+function renderNoComp() {
+  const g = document.getElementById('comp-groups');
+  const k = document.getElementById('comp-knockout');
+  const b = document.getElementById('comp-event-badge');
+  if (g) g.innerHTML = '<div class="empty"><div class="empty-ico">🏆</div><div style="color:var(--t2)">Belum ada kompetisi aktif</div></div>';
+  if (k) k.innerHTML = '';
+  if (b) b.innerHTML = '';
+  const delBtn = document.getElementById('comp-del-btn');
+  if (delBtn) delBtn.style.display = 'none';
+}
+
+function renderCompetition() {
+  if (!currentComp) return;
+  const b = document.getElementById('comp-event-badge');
+  if (b) {
+    const logo = currentComp.logoUrl ? `<img class="event-logo" src="${currentComp.logoUrl}"/>` : '🏆';
+    b.innerHTML = `<div class="event-badge">${logo}<div><div class="event-name">${sanitize(currentComp.name||'')}</div><div style="font-size:10px;color:var(--t2)">${currentComp.type||''}</div></div></div>`;
+  }
+  // Setup tabs
+  const tabsEl = document.getElementById('comp-tabs');
+  if (currentComp.type === 'knockout') {
+    if (tabsEl) tabsEl.innerHTML = '<div class="chip active" onclick="showCompTab(\'knockout\',this)">🏆 Knockout</div>';
+    document.getElementById('comp-groups').style.display = 'none';
+    document.getElementById('comp-knockout').style.display = 'block';
+  } else if (currentComp.type === 'groups') {
+    if (tabsEl) tabsEl.innerHTML = '<div class="chip active" onclick="showCompTab(\'groups\',this)">👥 Group Stage</div>';
+    document.getElementById('comp-groups').style.display = 'block';
+    document.getElementById('comp-knockout').style.display = 'none';
+  } else {
+    if (tabsEl) tabsEl.innerHTML = '<div class="chip active" onclick="showCompTab(\'groups\',this)">👥 Group Stage</div><div class="chip" onclick="showCompTab(\'knockout\',this)">🏆 Knockout</div>';
+    document.getElementById('comp-groups').style.display = 'block';
+    document.getElementById('comp-knockout').style.display = 'none';
+  }
+  renderGroups();
+  renderKnockout();
+}
+
+function showCompTab(tab, el) {
+  document.querySelectorAll('#comp-tabs .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('comp-groups').style.display = tab === 'groups' ? 'block' : 'none';
+  document.getElementById('comp-knockout').style.display = tab === 'knockout' ? 'block' : 'none';
+}
+
+function renderGroups() {
+  const wrap = document.getElementById('comp-groups');
+  if (!wrap || !currentComp || !currentComp.groups || !currentComp.groups.length) {
+    if (wrap) wrap.innerHTML = '<div class="empty"><div class="empty-ico">👥</div><div style="color:var(--t2)">Belum ada grup</div></div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  const qualify = currentComp.qualifyPerGroup || 2;
+  currentComp.groups.forEach((grp, gi) => {
+    const letter = String.fromCharCode(65 + gi);
+    const standings = calcGroupStandings(grp.teams || [], gi);
+    const div = document.createElement('div');
+    div.className = 'group-card';
+    const addBtn = isAdmin ? '<button class="btn btn-outline btn-sm" style="margin-left:auto;font-size:9px" onclick="openAssignGroup('+gi+')">➕ Tambah Tim</button>' : '';
+    const rows = standings.map((t,i) => {
+      const qualClass = i<qualify ? 'qualify' : '';
+      const qualBar = i<qualify ? '<div class="qualify-bar"></div>' : '';
+      const delBtn = isAdmin ? '<button onclick="removeFromGroup('+gi+',\''+t.name+'\' )" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:10px;margin-left:4px">✕</button>' : '';
+      const gd = t.gd>0 ? '+'+t.gd : t.gd;
+      return '<tr class="'+qualClass+'"><td style="position:relative">'+qualBar+getNatFlag(t.name)+' '+t.name+delBtn+'</td><td style="text-align:center">'+t.p+'</td><td style="text-align:center">'+t.w+'</td><td style="text-align:center">'+t.d+'</td><td style="text-align:center">'+t.l+'</td><td style="text-align:center">'+gd+'</td><td style="text-align:center;font-weight:700;color:var(--acc)">'+t.pts+'</td></tr>';
+    }).join('');
+    div.innerHTML = '<div class="group-title">👥 Grup '+letter+' '+addBtn+'</div><table class="group-table"><thead><tr><th>Negara</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    wrap.appendChild(div);
+  });
+}
+
+function calcGroupStandings(teams, groupIdx) {
+  const stats = {};
+  teams.forEach(t => { stats[t] = {name:t,p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}; });
+  matches.forEach(m => {
+    if (m.status !== 'done') return;
+    if (!teams.includes(m.teamA) || !teams.includes(m.teamB)) return;
+    const a = stats[m.teamA], b = stats[m.teamB];
+    if (!a || !b) return;
+    const sa = parseInt(m.scoreA)||0, sb = parseInt(m.scoreB)||0;
+    a.p++; b.p++; a.gf+=sa; a.ga+=sb; b.gf+=sb; b.ga+=sa;
+    a.gd=a.gf-a.ga; b.gd=b.gf-b.ga;
+    if (sa>sb){a.w++;a.pts+=3;b.l++;}
+    else if (sa<sb){b.w++;b.pts+=3;a.l++;}
+    else{a.d++;b.d++;a.pts++;b.pts++;}
+  });
+  return Object.values(stats).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+}
+
+function renderKnockout() {
+  const wrap = document.getElementById('comp-knockout');
+  if (!wrap || !currentComp || !currentComp.rounds || !currentComp.rounds.length) {
+    if (wrap) wrap.innerHTML = '<div class="empty"><div class="empty-ico">🏆</div><div style="color:var(--t2)">Belum ada bracket</div></div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  const bracket = document.createElement('div');
+  bracket.className = 'bracket-wrap';
+  const inner = document.createElement('div');
+  inner.className = 'bracket';
+
+  // Calculate height distribution per round
+  const maxMatches = Math.max(...currentComp.rounds.map(r => (r.matches||[]).length));
+
+  currentComp.rounds.forEach((round, ri) => {
+    const col = document.createElement('div');
+    col.className = 'bracket-round';
+    const matchCount = (round.matches||[]).length;
+    // Calculate spacing to center matches within column
+    const spacer = maxMatches / matchCount;
+    col.style.minHeight = (maxMatches * 72) + 'px';
+    col.style.justifyContent = 'space-around';
+    col.innerHTML = `<div class="bracket-round-title">${sanitize(round.name||'')}</div>`;
+    const matchesWrap = document.createElement('div');
+    matchesWrap.style.cssText = `display:flex;flex-direction:column;flex:1;justify-content:space-around;`;
+    (round.matches||[]).forEach((bm, mi) => {
+      const el = document.createElement('div');
+      el.className = 'bracket-match';
+      const winA = bm.scoreA !== null && bm.scoreB !== null && parseInt(bm.scoreA) > parseInt(bm.scoreB);
+      const winB = bm.scoreA !== null && bm.scoreB !== null && parseInt(bm.scoreB) > parseInt(bm.scoreA);
+      const classA = winA ? 'winner' : '';
+      const classB = winB ? 'winner' : '';
+      const scoreA = bm.scoreA !== null && bm.scoreA !== undefined ? bm.scoreA : '';
+      const scoreB = bm.scoreB !== null && bm.scoreB !== undefined ? bm.scoreB : '';
+      const btnA = isAdmin ? '<button class="bracket-assign-btn" onclick="openAssignBracket('+ri+','+mi+',\'A\')">+ Tim A</button>' : 'TBD';
+      const btnB = isAdmin ? '<button class="bracket-assign-btn" onclick="openAssignBracket('+ri+','+mi+',\'B\')">+ Tim B</button>' : 'TBD';
+      const teamAHtml = bm.teamA
+        ? '<div class="bracket-team '+classA+'">'+getNatFlag(bm.teamA)+' '+bm.teamA+'<span class="bracket-score">'+scoreA+'</span></div>'
+        : '<div class="bracket-team" style="color:var(--t3)">'+btnA+'</div>';
+      const teamBHtml = bm.teamB
+        ? '<div class="bracket-team '+classB+'">'+getNatFlag(bm.teamB)+' '+bm.teamB+'<span class="bracket-score">'+scoreB+'</span></div>'
+        : '<div class="bracket-team" style="color:var(--t3)">'+btnB+'</div>';
+      el.innerHTML = teamAHtml + teamBHtml;
+      matchesWrap.appendChild(el);
+    });
+    col.appendChild(matchesWrap);
+    inner.appendChild(col);
+  });
+  bracket.appendChild(inner);
+  wrap.appendChild(bracket);
+}
+
+async function saveCompetition() {
+  if (!isAdmin) return;
+  const name = document.getElementById('comp-name-inp').value.trim();
+  const type = document.getElementById('comp-type-inp').value;
+  if (!name) { toast('Nama wajib diisi','warn'); return; }
+
+  // Delete old competition first
+  if (currentComp) {
+    await db.collection('ibfa_competitions').doc(currentComp.id).delete();
+  }
+
+  let groups = [], rounds = [];
+
+  if (type !== 'knockout') {
+    const numGroups = parseInt(document.getElementById('comp-groups-inp').value);
+    const qualify = parseInt(document.getElementById('comp-qualify-inp').value);
+    // Empty groups - admin assign manually
+    for (let i=0;i<numGroups;i++) groups.push({ teams: [] });
+
+    if (type === 'groups+knockout') {
+      const totalQualify = qualify * numGroups;
+      rounds = buildKnockoutRounds(totalQualify);
+    }
+    await db.collection('ibfa_competitions').add({
+      name, type, groups, rounds,
+      qualifyPerGroup: qualify,
+      createdAt: FS.FieldValue.serverTimestamp()
+    });
+  } else {
+    const koTeams = parseInt(document.getElementById('comp-ko-teams-inp').value);
+    rounds = buildKnockoutRounds(koTeams);
+    await db.collection('ibfa_competitions').add({
+      name, type: 'knockout', groups: [], rounds,
+      createdAt: FS.FieldValue.serverTimestamp()
+    });
+  }
+
+  closeMo('mo-comp');
+  toast('Kompetisi dibuat! 🏆','success');
+  loadCompetition();
+}
+
+function buildKnockoutRounds(totalTeams) {
+  const roundNames = {2:'FINAL',4:'Semi Final',8:'Quarter Final',16:'Round of 16',32:'Round of 32'};
+  const rounds = [];
+  let r = totalTeams;
+  while (r >= 2) {
+    rounds.push({ name: roundNames[r]||`Round of ${r}`, matches: Array(r/2).fill(null).map(()=>({teamA:null,teamB:null,scoreA:null,scoreB:null})) });
+    r = r/2;
+    if (r < 1) break;
+  }
+  return rounds;
+}
+
+async function deleteCompetition() {
+  if (!isAdmin || !currentComp) return;
+  if (!confirm('Hapus event ini? Semua data bracket dan grup akan hilang.')) return;
+  await db.collection('ibfa_competitions').doc(currentComp.id).delete();
+  currentComp = null;
+  toast('Event dihapus','warn');
+  loadCompetition();
+}
+
+// ===== ASSIGN NATION TO BRACKET =====
+function openAssignBracket(roundIdx, matchIdx, slot) {
+  assignTarget = { type: 'round', roundIdx, matchIdx, slot };
+  showAssignModal();
+}
+
+function openAssignGroup(groupIdx) {
+  assignTarget = { type: 'group', groupIdx };
+  showAssignModal();
+}
+
+function showAssignModal() {
+  const list = document.getElementById('assign-nation-list');
+  list.innerHTML = '';
+  document.getElementById('assign-search').value = '';
+  // Show all nations
+  renderAssignList(nations);
+  openMo('mo-assign');
+}
+
+function filterAssignList(q) {
+  const filtered = nations.filter(n => n.name.toLowerCase().includes(q.toLowerCase()));
+  renderAssignList(filtered);
+}
+
+function renderAssignList(list) {
+  const el = document.getElementById('assign-nation-list');
+  el.innerHTML = '';
+  list.forEach(n => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline';
+    btn.style.cssText = 'width:100%;justify-content:flex-start;gap:8px;padding:10px 14px;';
+    btn.innerHTML = `<span style="font-size:20px">${n.flag||'🏳'}</span> ${n.name}`;
+    btn.onclick = () => assignNation(n.name);
+    el.appendChild(btn);
+  });
+}
+
+async function assignNation(nationName) {
+  if (!assignTarget || !currentComp) return;
+  const comp = { ...currentComp };
+
+  if (assignTarget.type === 'round') {
+    const { roundIdx, matchIdx, slot } = assignTarget;
+    const rounds = comp.rounds ? JSON.parse(JSON.stringify(comp.rounds)) : [];
+    if (rounds[roundIdx] && rounds[roundIdx].matches[matchIdx]) {
+      if (slot === 'A') rounds[roundIdx].matches[matchIdx].teamA = nationName;
+      else rounds[roundIdx].matches[matchIdx].teamB = nationName;
+    }
+    await db.collection('ibfa_competitions').doc(comp.id).update({ rounds });
+  } else if (assignTarget.type === 'group') {
+    const { groupIdx } = assignTarget;
+    const groups = comp.groups ? JSON.parse(JSON.stringify(comp.groups)) : [];
+    if (groups[groupIdx]) {
+      if (!groups[groupIdx].teams) groups[groupIdx].teams = [];
+      if (!groups[groupIdx].teams.includes(nationName)) {
+        groups[groupIdx].teams.push(nationName);
+      }
+    }
+    await db.collection('ibfa_competitions').doc(comp.id).update({ groups });
+  }
+
+  closeMo('mo-assign');
+  toast(`${nationName} ditambahkan! ⚽`,'success');
+  await loadCompetition();
+}
+
+async function removeFromGroup(groupIdx, nationName) {
+  if (!isAdmin || !currentComp) return;
+  const groups = JSON.parse(JSON.stringify(currentComp.groups));
+  groups[groupIdx].teams = groups[groupIdx].teams.filter(t => t !== nationName);
+  await db.collection('ibfa_competitions').doc(currentComp.id).update({ groups });
+  toast(`${nationName} dihapus dari grup`,'warn');
+  await loadCompetition();
+}
+
+// ===== EVENT LOGO =====
+function previewEvLogo(url) {
+  const p = document.getElementById('evlogo-preview');
+  const img = document.getElementById('evlogo-img');
+  if (url) { img.src = url; p.style.display = 'block'; } else { p.style.display = 'none'; }
+}
+
+async function onEvLogoFile(inp) {
+  const file = inp.files[0];
+  if (!file) return;
+  toast('Mengupload logo...','info');
+  try {
+    const url = await uploadImg(file);
+    document.getElementById('evlogo-url').value = url;
+    previewEvLogo(url);
+    toast('Logo terupload! ✅','success');
+  } catch(e) {
+    toast('Gagal upload: ' + e.message,'error');
+  }
+}
+
+async function saveEventLogo() {
+  if (!isAdmin) return;
+  const name = document.getElementById('evlogo-name').value.trim();
+  const url = document.getElementById('evlogo-url').value.trim();
+  if (!url) { toast('URL logo wajib diisi','warn'); return; }
+  await db.collection('ibfa_settings').doc('eventLogo').set({ name, url, updatedAt: FS.FieldValue.serverTimestamp() });
+  closeMo('mo-event-logo');
+  toast('Event logo disimpan! 🎨','success');
+  loadEventLogo();
+}
+
+async function loadEventLogo() {
+  // attach to current competition badge if needed
+}
+
+// ===== TOP SCORER =====
+function loadTopScorers() {
+  const list = document.getElementById('scorer-list');
+  if (!list) return;
+  const adminBtn = document.getElementById('scorer-admin-btn');
+  if (adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
+  db.collection('ibfa_scorers').orderBy('goals','desc').limit(20)
+    .onSnapshot(snap => {
+      list.innerHTML = '';
+      if (snap.empty) {
+        list.innerHTML = '<div class="empty"><div class="empty-ico">⚽</div><div style="color:var(--t2)">Belum ada data scorer</div></div>';
+        return;
+      }
+      snap.docs.forEach((doc,i) => {
+        const s = doc.data();
+        const nat = nations.find(n=>n.name===s.nation)||{};
+        const rc = i===0?'g':i===1?'s':i===2?'b':'';
+        const div = document.createElement('div');
+        div.className = 'scorer-item';
+        const editBtn = isAdmin ? '<button class="btn btn-outline btn-sm" onclick="openEditScorer(\''+doc.id+'\',\''+s.playerName+'\',\''+s.nation+'\','+s.goals+')">✏️</button>' : '';
+        div.innerHTML = '<div class="scorer-rank rn '+rc+'">'+(i+1)+'</div><div class="scorer-flag">'+(nat.flag||'🏳')+'</div><div class="scorer-info"><div class="scorer-name">'+sanitize(s.playerName||'')+'</div><div class="scorer-nation">'+sanitize(s.nation||'')+'</div></div><div><div class="scorer-goals">'+(s.goals||0)+'</div><div class="scorer-goals-l">Goals</div></div>'+editBtn;
+        list.appendChild(div);
+      });
+    });
+}
+
+function populateScorerNations() {
+  const sel = document.getElementById('scorer-nation-inp');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Pilih negara</option>';
+  nations.forEach(n => { sel.innerHTML += `<option value="${n.name}">${n.flag||'🏳'} ${n.name}</option>`; });
+}
+
+function openAddScorer() {
+  document.getElementById('scorer-id-inp').value = '';
+  document.getElementById('scorer-name-inp').value = '';
+  document.getElementById('scorer-goals-inp').value = '';
+  populateScorerNations();
+  openMo('mo-scorer');
+}
+
+function openEditScorer(id, name, nation, goals) {
+  populateScorerNations();
+  document.getElementById('scorer-id-inp').value = id;
+  document.getElementById('scorer-name-inp').value = name;
+  document.getElementById('scorer-goals-inp').value = goals;
+  // set nation
+  const sel = document.getElementById('scorer-nation-inp');
+  for (let o of sel.options) { if (o.value === nation) o.selected = true; }
+  openMo('mo-scorer');
+}
+
+async function saveScorer() {
+  if (!isAdmin) return;
+  const id = document.getElementById('scorer-id-inp').value;
+  const playerName = document.getElementById('scorer-name-inp').value.trim();
+  const nation = document.getElementById('scorer-nation-inp').value;
+  const goals = parseInt(document.getElementById('scorer-goals-inp').value)||0;
+  if (!playerName || !nation) { toast('Nama dan negara wajib diisi','warn'); return; }
+  if (id) {
+    await db.collection('ibfa_scorers').doc(id).update({ playerName, nation, goals });
+  } else {
+    await db.collection('ibfa_scorers').add({ playerName, nation, goals, createdAt: FS.FieldValue.serverTimestamp() });
+  }
+  document.getElementById('scorer-id-inp').value = '';
+  document.getElementById('scorer-name-inp').value = '';
+  document.getElementById('scorer-goals-inp').value = '';
+  closeMo('mo-scorer');
+  toast('Scorer disimpan! ⚽','success');
+}
+
+// ===== HEAD TO HEAD =====
+function initH2H() {
+  const a = document.getElementById('h2h-a');
+  const b = document.getElementById('h2h-b');
+  if (!a || !b) return;
+  [a,b].forEach(sel => {
+    sel.innerHTML = '<option value="">Pilih negara</option>';
+    nations.forEach(n => { sel.innerHTML += `<option value="${n.name}">${n.flag||'🏳'} ${n.name}</option>`; });
+  });
+}
+
+function renderH2H() {
+  const nameA = document.getElementById('h2h-a').value;
+  const nameB = document.getElementById('h2h-b').value;
+  const res = document.getElementById('h2h-result');
+  if (!nameA || !nameB || nameA === nameB) { res.innerHTML = '<div style="text-align:center;color:var(--t2);padding:20px">Pilih dua negara berbeda</div>'; return; }
+  const natA = nations.find(n=>n.name===nameA)||{};
+  const natB = nations.find(n=>n.name===nameB)||{};
+  // Filter h2h matches
+  const h2h = matches.filter(m => m.status==='done' && ((m.teamA===nameA&&m.teamB===nameB)||(m.teamA===nameB&&m.teamB===nameA)));
+  let wA=0,wB=0,draws=0,gfA=0,gfB=0;
+  h2h.forEach(m => {
+    const sa = m.teamA===nameA ? parseInt(m.scoreA)||0 : parseInt(m.scoreB)||0;
+    const sb = m.teamA===nameA ? parseInt(m.scoreB)||0 : parseInt(m.scoreA)||0;
+    gfA+=sa; gfB+=sb;
+    if (sa>sb) wA++; else if (sb>sa) wB++; else draws++;
+  });
+  const total = h2h.length;
+  // Prediction based on ranking
+  const rankA = nations.findIndex(n=>n.name===nameA)+1 || 99;
+  const rankB = nations.findIndex(n=>n.name===nameB)+1 || 99;
+  let predA, predDraw, predB;
+  if (total === 0) {
+    // 50/50 dengan sedikit pengaruh ranking
+    const diff = rankB - rankA; // positif = A lebih tinggi ranking
+    predDraw = 25;
+    predA = Math.min(65, Math.max(35, 50 + diff*1.5));
+    predB = 100 - predA - predDraw;
+  } else {
+    predA = Math.round((wA/total)*100*0.6 + ((rankB-rankA)*1.5)*0.4);
+    predB = Math.round((wB/total)*100*0.6 + ((rankA-rankB)*1.5)*0.4);
+    predDraw = Math.round((draws/total)*100*0.6 + 25*0.4);
+    // normalize
+    const sum = predA+predB+predDraw;
+    predA = Math.round(predA/sum*100);
+    predB = Math.round(predB/sum*100);
+    predDraw = 100-predA-predB;
+  }
+  predA = Math.max(5,predA); predB = Math.max(5,predB); predDraw = Math.max(5,predDraw);
+
+  // Build h2h result HTML without nested template literals
+  let html = '';
+  html += '<div style="display:flex;justify-content:space-around;margin-bottom:14px;">';
+  html += '<div style="text-align:center"><div style="font-size:32px">'+(natA.flag||'🏳')+'</div><div style="font-weight:700">'+nameA+'</div><div style="font-size:10px;color:var(--t2)">Rank #'+rankA+'</div></div>';
+  html += '<div style="text-align:center;color:var(--t3)"><div style="font-family:var(--f2);font-size:28px;font-weight:700">'+total+'</div><div style="font-size:10px">Pertemuan</div></div>';
+  html += '<div style="text-align:center"><div style="font-size:32px">'+(natB.flag||'🏳')+'</div><div style="font-weight:700">'+nameB+'</div><div style="font-size:10px;color:var(--t2)">Rank #'+rankB+'</div></div>';
+  html += '</div>';
+  html += '<div class="h2h-stats">';
+  html += '<div class="h2h-stat"><div class="h2h-stat-n" style="color:var(--ibfa-light)">'+wA+'</div><div class="h2h-stat-l">Menang '+nameA+'</div></div>';
+  html += '<div class="h2h-stat"><div class="h2h-stat-n" style="color:var(--t2)">'+draws+'</div><div class="h2h-stat-l">Seri</div></div>';
+  html += '<div class="h2h-stat"><div class="h2h-stat-n" style="color:var(--red)">'+wB+'</div><div class="h2h-stat-l">Menang '+nameB+'</div></div>';
+  html += '</div>';
+  if (total > 0) {
+    const pctA = Math.round(wA/total*100);
+    const pctB = Math.round(wB/total*100);
+    html += '<div class="h2h-bar" style="margin-bottom:14px"><div class="h2h-bar-a" style="width:'+pctA+'%"></div><div style="background:var(--t3);flex:'+draws+'"></div><div class="h2h-bar-b" style="width:'+pctB+'%"></div></div>';
+  }
+  html += '<div class="h2h-predict"><div class="h2h-predict-title">🔮 Prediksi Kemenangan</div>';
+  html += '<div class="h2h-predict-bar"><div class="h2h-pred-a" style="width:'+predA+'%">'+predA+'%</div><div class="h2h-pred-draw" style="width:'+predDraw+'%">'+predDraw+'%</div><div class="h2h-pred-b" style="width:'+predB+'%">'+predB+'%</div></div>';
+  html += '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2)"><span>'+nameA+'</span><span>Seri</span><span>'+nameB+'</span></div>';
+  if (total===0) html += '<div style="font-size:10px;color:var(--t3);margin-top:6px">*Berdasarkan ranking (belum ada riwayat H2H)</div>';
+  html += '</div>';
+  if (total > 0) {
+    html += '<div style="margin-top:14px"><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Riwayat Pertemuan</div>';
+    h2h.slice(-5).reverse().forEach(m => {
+      const sa = m.teamA===nameA ? m.scoreA : m.scoreB;
+      const sb = m.teamA===nameA ? m.scoreB : m.scoreA;
+      const icon = sa > sb ? '✅' : '❌';
+      html += '<div style="background:var(--bg4);border-radius:4px;padding:7px 10px;margin-bottom:4px;display:flex;justify-content:space-between;font-size:12px"><span>'+nameA+'</span><span style="font-family:var(--f2);font-weight:700">'+sa+' : '+sb+' '+icon+'</span><span>'+nameB+'</span></div>';
+    });
+    html += '</div>';
+  }
+  res.innerHTML = html;
+}
+
+// ===== MATCH REPORT =====
+function openReport(matchId) {
+  document.getElementById('report-match-id').value = matchId;
+  // Load existing
+  db.collection('ibfa_matches').doc(matchId).get().then(d=>{
+    document.getElementById('report-text-inp').value = d.data()?.report || '';
+  });
+  openMo('mo-report');
+}
+
+async function saveReport() {
+  if (!isAdmin) return;
+  const id = document.getElementById('report-match-id').value;
+  const text = document.getElementById('report-text-inp').value.trim();
+  if (!text) { toast('Laporan tidak boleh kosong','warn'); return; }
+  await db.collection('ibfa_matches').doc(id).update({ report: text });
+  closeMo('mo-report');
+  toast('Report disimpan! 📝','success');
+  loadAll();
+}
+
+// ===== CHAT REPLY =====
+let replyTo = null;
+
+function setReply(msgId, displayName, text) {
+  replyTo = { msgId, displayName, text };
+  const bar = document.getElementById('reply-bar');
+  if (!bar) return;
+  bar.style.display = 'flex';
+  document.getElementById('reply-bar-name').textContent = displayName;
+  document.getElementById('reply-bar-text').textContent = text;
+  document.getElementById('chat-msg-inp').focus();
+}
+
+function cancelReply() {
+  replyTo = null;
+  const bar = document.getElementById('reply-bar');
+  if (bar) bar.style.display = 'none';
+}
+
+// ===== BAN USER =====
+async function toggleBan(uid, currentBanned) {
+  if (!isOwner) return;
+  const action = currentBanned ? 'Unban' : 'Ban';
+  if (!confirm(`${action} user ini?`)) return;
+  await db.collection('ibfa_users').doc(uid).update({ banned: !currentBanned });
+  toast(`User di-${action.toLowerCase()}!`, currentBanned?'success':'warn');
+  loadAllUsers();
+}
+
+// ===== FETCH DATA =====
+async function fetchNations() {
+  const s = await db.collection('ibfa_nations').orderBy('points','desc').get();
+  nations = s.docs.map(d=>({id:d.id,...d.data()}));
+}
+async function fetchMatches() {
+  const s = await db.collection('ibfa_matches').orderBy('date','desc').get();
+  matches = s.docs.map(d=>({id:d.id,...d.data()}));
+}
+async function loadAll() {
+  Object.keys(_matchReg).forEach(k => delete _matchReg[k]);
+  await fetchNations();
+  await fetchMatches();
+  renderRanking(nations);
+  renderMatches(matches);
+  renderNations();
+  loadAnnouncements();
+  loadUsersForMention();
+  loadTopScorers();
+  loadCompetition();
+  initH2H();
+  initChat();
+  const map={};
+  nations.forEach((n,i)=>{map[n.id]=i+1;map[n.id+'_e']=Date.now()+(8*60*60*1000);});
+  const old=JSON.parse(localStorage.getItem('ibfa_rank_prev')||'{}');
+  if (nations.some((n,i)=>old[n.id]!==i+1)) localStorage.setItem('ibfa_rank_prev',JSON.stringify(map));
+}
+
+// ===== RENDER RANKING =====
+function renderRanking(data) {
+  const tbody = document.getElementById('ranking-body');
+  tbody.innerHTML='';
+  const prev=JSON.parse(localStorage.getItem('ibfa_rank_prev')||'{}');
+  const now=Date.now();
+  document.getElementById('s-nations').textContent = nations.length;
+  data.forEach((n,i)=>{
+    const rank=i+1;
+    let trend='<span class="trend-same">—</span>';
+    const pr=prev[n.id];
+    if (pr!==undefined) {
+      const exp=prev[n.id+'_e'];
+      if (!exp||now<exp) {
+        if (rank<pr) trend=`<span class="trend-up">▲${pr-rank}</span>`;
+        else if (rank>pr) trend=`<span class="trend-down">▼${rank-pr}</span>`;
+      }
+    }
+    const rc=rank===1?'g':rank===2?'s':rank===3?'b':'';
+    const form=(n.form||[]).slice(-5).map(r=>`<div class="fb f${r.toLowerCase()}">${r}</div>`).join('');
+    const gd=(n.gf||0)-(n.ga||0);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="rn ${rc}">${rank}</span></td>
+      <td>${trend}</td>
+      <td><span class="rflag">${n.flag||'🏳'}</span><span class="rname">${n.name}</span>${n.group?'<span class="rgroup">['+n.group+']</span>':''}</td>
+      <td class="rstat">${n.played||0}</td>
+      <td class="rstat">${n.won||0}</td>
+      <td class="rstat">${n.drawn||0}</td>
+      <td class="rstat">${n.lost||0}</td>
+      <td class="rstat" style="color:${gd>0?'var(--grn)':gd<0?'var(--red)':'var(--t2)'}">${gd>0?'+'+gd:gd}</td>
+      <td class="rpts">${n.points||0}</td>
+      <td style="text-align:center"><div class="form-wrap" style="justify-content:center">${form||'—'}</div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== RENDER MATCHES =====
+function renderMatches(data) {
+  const list=document.getElementById('matches-list');
+  list.innerHTML='';
+  document.getElementById('s-live').textContent = data.filter(m=>m.status==='live').length;
+  document.getElementById('s-matches').textContent = matches.length;
+  if (!data.length) {
+    list.innerHTML='<div class="empty"><div class="empty-ico">📅</div><div style="font-weight:600;color:var(--t2)">Belum ada pertandingan</div></div>';
+    return;
+  }
+  data.forEach(m=>list.appendChild(createMatchCard(m)));
+}
+
+function getNatFlag(name) { return (nations.find(n=>n.name===name)||{}).flag||'🏳'; }
+
+function createMatchCard(m) {
+  const card=document.createElement('div');
+  card.className='match-card'; card.id='mc-'+m.id;
+  const dateObj=m.date&&m.date.toDate?m.date.toDate():(m.date?new Date(m.date):null);
+  const d=dateObj?dateObj.toLocaleString('id-ID',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'TBD';
+  const smap={upcoming:'ms-upcoming',live:'ms-live',done:'ms-done',cancelled:'ms-cancelled'};
+  const slbl={upcoming:'Upcoming',live:'🔴 Live',done:'Selesai',cancelled:'Dibatalkan'};
+  const score=m.status==='upcoming'
+    ?'<div class="score-vs">VS</div>'
+    :`<div class="score-num">${m.scoreA!==null?m.scoreA:0}<span class="sep">:</span>${m.scoreB!==null?m.scoreB:0}</div>`;
+  let admBtns = '';
+  const _ri = Object.keys(_matchReg).length;
+  _matchReg[_ri] = {id:m.id, teamA:m.teamA, teamB:m.teamB, scoreA:m.scoreA, scoreB:m.scoreB};
+  if (m.status==='upcoming') admBtns += '<button class="btn btn-warn btn-sm" onclick="_mact(&quot;live&quot;,'+_ri+')">▶ Live</button>';
+  if (['live','upcoming'].includes(m.status)) admBtns += '<button class="btn btn-success btn-sm" onclick="_mact(&quot;score&quot;,'+_ri+')">✅ Input Skor</button>';
+  if (m.status==='done') admBtns += '<button class="btn btn-success btn-sm" onclick="_mact(&quot;editscore&quot;,'+_ri+')">✏️ Edit Skor</button>';
+  if (m.status==='done') admBtns += '<button class="btn btn-outline btn-sm" onclick="_mact(&quot;report&quot;,'+_ri+')">📝 Report</button>';
+  if (!['done','cancelled'].includes(m.status)) admBtns += '<button class="btn btn-danger btn-sm" onclick="_mact(&quot;cancel&quot;,'+_ri+')">✕ Batal</button>';
+  admBtns += '<button class="btn btn-danger btn-sm" onclick="_mact(&quot;delete&quot;,'+_ri+')">🗑</button>';
+  const adm = isAdmin ? '<div class="match-act">'+admBtns+'</div>' : '';
+  const cmtInput=cu
+    ?`<div class="cmt-row"><input class="cmt-inp" id="ci-${m.id}" placeholder="Prediksi kamu..." onkeydown="if(event.key==='Enter')sendComment('${m.id}')"/><button class="cmt-send" onclick="sendComment('${m.id}')">Kirim</button></div>`
+    :'<p style="color:var(--t3);font-size:11px;margin-bottom:6px">Login untuk berkomentar</p>';
+  card.innerHTML=`
+    <div class="match-top">
+      <span class="match-comp">${m.competition||'IBFA Match'}</span>
+      <span class="ms ${smap[m.status]||'ms-upcoming'}">${slbl[m.status]||'Upcoming'}</span>
+    </div>
+    <div class="match-main">
+      <div class="match-grid">
+        <div class="team-blk"><span class="team-em">${getNatFlag(m.teamA)}</span><div class="team-nm">${m.teamA||'TBD'}</div></div>
+        <div class="score-blk">${score}<div class="match-date">${d}</div></div>
+        <div class="team-blk"><span class="team-em">${getNatFlag(m.teamB)}</span><div class="team-nm">${m.teamB||'TBD'}</div></div>
+      </div>
+    </div>
+    ${adm}
+    ${m.report?('<div class="report-wrap"><div class="report-title">📝 Match Report'+(isAdmin?'<span class="report-edit" onclick="openReport(\''+m.id+'\')">✏️ Edit</span>':'')+'</div><div class="report-text">'+sanitize(m.report)+'</div></div>'):''}
+    <div class="cmt-sec">
+      <div class="cmt-hd">💬 Komentar & Prediksi</div>
+      ${cmtInput}
+      <div class="cmt-list" id="cl-${m.id}"></div>
+    </div>`;
+  loadComments(m.id);
+  return card;
+}
+
+// ===== RENDER NATIONS =====
+function renderNations() {
+  const g=document.getElementById('nations-grid');
+  const addBtn=document.getElementById('nations-add-btn');
+  if (addBtn) addBtn.style.display=isAdmin?'':'none';
+  g.innerHTML='';
+  if (!nations.length) {
+    g.innerHTML='<div class="empty"><div class="empty-ico">🌍</div><div style="font-weight:600;color:var(--t2)">Belum ada negara</div></div>';
+    return;
+  }
+  nations.forEach(n=>{
+    const c=document.createElement('div');
+    c.className='nation-card';
+    const gd=(n.gf||0)-(n.ga||0);
+    const imgEl=n.imageURL?`<img class="nation-img" src="${n.imageURL}" onerror="this.style.display='none'" alt="${n.name}"/>`:'';
+    const editBtn=isAdmin?`<button class="nation-edit-btn" onclick="openEditNation('${n.id}')">✏️ Edit</button>`:'';
+    c.innerHTML=`
+      ${imgEl}
+      <div class="nation-body">
+        <span class="nat-flag">${n.flag||'🏳'}</span>
+        <div class="nat-name">${n.name}</div>
+        <div class="nat-code">${n.code||''} ${n.group?'· '+n.group:''}</div>
+        <div class="nat-stats">
+          <div class="nat-stat"><div class="nat-stat-n">${n.points||0}</div><div class="nat-stat-l">Pts</div></div>
+          <div class="nat-stat"><div class="nat-stat-n">${n.played||0}</div><div class="nat-stat-l">Played</div></div>
+          <div class="nat-stat"><div class="nat-stat-n">${n.won||0}</div><div class="nat-stat-l">Won</div></div>
+          <div class="nat-stat"><div class="nat-stat-n" style="color:${gd>0?'var(--grn)':gd<0?'var(--red)':'var(--t1)'}">${gd>0?'+'+gd:gd}</div><div class="nat-stat-l">GD</div></div>
+        </div>
+      </div>
+      ${editBtn}`;
+    g.appendChild(c);
+  });
+}
+
+// ===== RENDER PROFILE =====
+function renderProfile() {
+  const card=document.getElementById('prof-card');
+  const editWrap=document.getElementById('prof-edit-wrap');
+  if (!cu) {
+    card.innerHTML='<div style="color:var(--t2);font-size:13px">Login untuk melihat profil</div>';
+    if (editWrap) editWrap.style.display='none';
+    return;
+  }
+  const ph=cuData.photoURL||cu.photoURL||`https://api.dicebear.com/7.x/bottts/svg?seed=${cu.uid}`;
+  const rolePill=isOwner
+    ?'<span class="role-pill rp-owner">💎 Owner</span>'
+    :isAdmin
+      ?'<span class="role-pill rp-admin">👑 Admin</span>'
+      :'<span class="role-pill rp-user">👤 User</span>';
+  card.innerHTML=`
+    <div class="prof-av-w">
+      <img class="prof-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${cu.uid}'"/>
+      <div class="prof-av-edit" onclick="document.getElementById('av-inp').click()">📷</div>
+      <input type="file" id="av-inp" accept="image/*" style="display:none" onchange="changeAvatar(this)"/>
+    </div>
+    <div class="prof-info">
+      <div class="prof-name">${cuData.displayName||cu.displayName||'User'}</div>
+      ${rolePill}
+      <div class="prof-email">${cu.email}</div>
+      <div style="margin-top:10px">
+        <button class="btn btn-danger btn-sm" onclick="doLogout()">↪ Logout</button>
+      </div>
+    </div>`;
+  if (document.getElementById('prof-name')) document.getElementById('prof-name').value=cuData.displayName||cu.displayName||'';
+  if (editWrap) editWrap.style.display='block';
+}
+
+// ===== UPDATE NAV =====
+function updateNav() {
+  const a=document.getElementById('nav-auth');
+  ['admin-tab','mob-admin-tab'].forEach(id=>{
+    const el=document.getElementById(id);
+    if (el) el.style.display=isAdmin?'':'none';
+  });
+  const ownerPanel=document.getElementById('owner-user-mgmt');
+  if (ownerPanel) ownerPanel.style.display=isOwner?'':'none';
+
+  if (cu) {
+    const ph=cuData.photoURL||cu.photoURL||`https://api.dicebear.com/7.x/bottts/svg?seed=${cu.uid}`;
+    const roleLabel=isOwner?'💎 Owner':isAdmin?'👑 Admin':'👤 User';
+    a.innerHTML=`
+      <div class="nav-user-chip" id="nav-chip" onclick="toggleDd(event)">
+        <img src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${cu.uid}'" alt=""/>
+        <span>${cuData.displayName||cu.displayName||'User'}</span>
+        <span class="nav-chevron">▾</span>
+        <div class="nav-dd">
+          <div class="nav-dd-head">
+            <img class="nav-dd-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${cu.uid}'"/>
+            <div class="nav-dd-info">
+              <div class="nav-dd-name">${cuData.displayName||cu.displayName||'User'}</div>
+              <div class="nav-dd-role">${roleLabel}</div>
+            </div>
+          </div>
+          <button class="nav-dd-item" onclick="closeDd();showPage('profile')">👤 Profil Saya</button>
+          ${isAdmin?'<button class="nav-dd-item" onclick="closeDd();showPage(\'admin\')">⚙ Admin Panel</button>':''}
+          <div class="nav-dd-sep"></div>
+          <button class="nav-dd-item red" onclick="closeDd();doLogout()">↪ Logout</button>
+        </div>
+      </div>`;
+  } else {
+    a.innerHTML=`
+      <button class="nav-btn" onclick="openLogin()">Login</button>
+      <button class="nav-btn primary" onclick="openRegister()">Daftar</button>`;
+  }
+  updateChatInput();
+}
+
+function toggleDd(e) {
+  e.stopPropagation();
+  const chip=document.getElementById('nav-chip');
+  if (chip) chip.classList.toggle('open');
+}
+function closeDd() {
+  const chip=document.getElementById('nav-chip');
+  if (chip) chip.classList.remove('open');
+}
+document.addEventListener('click', ()=>closeDd());
+
+// ===== AUTH =====
+auth.onAuthStateChanged(async u=>{
+  cu=u;
+  if (u) {
+
+    const s=await db.collection('ibfa_users').doc(u.uid).get();
+    const autoRole=u.email===OWNER_EMAIL?'owner':'user';
+    if (!s.exists) {
+      cuData={uid:u.uid,displayName:u.displayName||u.email.split('@')[0],photoURL:u.photoURL||'',email:u.email,role:autoRole};
+      await db.collection('ibfa_users').doc(u.uid).set({...cuData,createdAt:FS.FieldValue.serverTimestamp()});
+    } else {
+      cuData=s.data();
+      if (u.email===OWNER_EMAIL&&cuData.role!=='owner') {
+        cuData.role='owner';
+        await db.collection('ibfa_users').doc(u.uid).update({role:'owner'});
+      }
+    }
+    isOwner=cuData.role==='owner';
+    isAdmin=isOwner||cuData.role==='admin';
+    // Load theme from account
+    if (cuData.theme) {
+      document.documentElement.dataset.theme = cuData.theme;
+      localStorage.setItem('ibfa_theme', cuData.theme);
+      document.getElementById('theme-btn').textContent = cuData.theme === 'dark' ? '🌙' : '☀️';
+    }
+    closeMo('mo-login'); closeMo('mo-register');
+    updateNav(); renderProfile();
+    toast(`Selamat datang, ${cuData.displayName||u.displayName||u.email}! 👋`,'success');
+  } else {
+    cuData={}; isAdmin=false; isOwner=false;
+    if (chatUnsub) { chatUnsub(); chatUnsub=null; }
+    updateNav(); renderProfile();
+  }
+  loadAll();
+});
+
+// ===== AUTH ACTIONS =====
+function loginGoogle() {
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    .catch(e => toast('Login Google gagal: ' + e.message, 'error'));
+}
+function loginEmail() {
+  // Cek reCAPTCHA dengan aman
+  let rc = 'ok';
+  if (typeof grecaptcha !== 'undefined' && window._rcLogin !== undefined) {
+    try { rc = grecaptcha.getResponse(window._rcLogin); } catch(e) { rc = ''; }
+  }
+  if (!rc) { toast('Selesaikan verifikasi reCAPTCHA!','warn'); return; }
+  const em = document.getElementById('li-email').value.trim();
+  const pw = document.getElementById('li-pass').value;
+  if (!em || !pw) { toast('Email dan password wajib diisi!','warn'); return; }
+  auth.signInWithEmailAndPassword(em, pw)
+    .catch(e => {
+    const errMap = {
+      'auth/user-not-found': 'Email tidak ditemukan.',
+      'auth/wrong-password': 'Password salah.',
+      'auth/invalid-email': 'Format email tidak valid.',
+      'auth/user-disabled': 'Akun dinonaktifkan.',
+      'auth/too-many-requests': 'Terlalu banyak percobaan. Coba lagi nanti.',
+      'auth/invalid-credential': 'Email atau password salah.',
+    };
+    const msg = errMap[e.code] || ('Login gagal: ' + e.message);
+    toast(msg, 'error');
+    if (typeof grecaptcha !== 'undefined' && window._rcLogin !== undefined) {
+      try { grecaptcha.reset(window._rcLogin); } catch(ex) {}
+    }
+  });
+}
+function registerEmail() {
+  let rc = 'ok';
+  if (typeof grecaptcha !== 'undefined' && window._rcRegister !== undefined) {
+    try { rc = grecaptcha.getResponse(window._rcRegister); } catch(e) { rc = ''; }
+  }
+  if (!rc) { toast('Selesaikan verifikasi reCAPTCHA!','warn'); return; }
+  const nm=document.getElementById('re-name').value.trim();
+  const em=document.getElementById('re-email').value.trim();
+  const pw=document.getElementById('re-pass').value;
+  if (!nm) { toast('Masukkan nama kamu','warn'); return; }
+  if (!em) { toast('Masukkan email kamu','warn'); return; }
+  if (pw.length < 6) { toast('Password minimal 6 karakter','warn'); return; }
+  auth.createUserWithEmailAndPassword(em,pw)
+    .then(c=>c.user.updateProfile({displayName:nm}))
+    .then(()=>toast('Akun dibuat! 🎉','success'))
+    .catch(e=>{
+      const errMap = {
+        'auth/email-already-in-use': 'Email sudah terdaftar.',
+        'auth/invalid-email': 'Format email tidak valid.',
+        'auth/weak-password': 'Password terlalu lemah (min 6 karakter).',
+      };
+      const msg = errMap[e.code] || ('Daftar gagal: ' + e.message);
+      toast(msg, 'error');
+      if (typeof grecaptcha !== 'undefined' && window._rcRegister !== undefined) {
+        try { grecaptcha.reset(window._rcRegister); } catch(ex) {}
+      }
+    });
+}
+function onRecaptchaLoad() {
+  const theme=document.documentElement.dataset.theme==='dark'?'dark':'light';
+  try {
+    window._rcLogin=grecaptcha.render('recaptcha-login',{sitekey:'6LdxunosAAAAAAs5AoywreLIR7US-rOW2gPzWKOf',theme});
+    window._rcRegister=grecaptcha.render('recaptcha-register',{sitekey:'6LdxunosAAAAAAs5AoywreLIR7US-rOW2gPzWKOf',theme});
+  } catch(e){}
+}
+function doLogout() {
+  auth.signOut().then(()=>toast('Logout berhasil','info'));
+}
+
+// ===== PROFILE =====
+async function changeAvatar(inp) {
+  const file=inp.files[0]; if (!file) return;
+  toast('Mengupload...','info');
+  try {
+    const url=await uploadImg(file);
+    await db.collection('ibfa_users').doc(cu.uid).update({photoURL:url});
+    await cu.updateProfile({photoURL:url});
+    cuData.photoURL=url; updateNav(); renderProfile();
+    toast('Foto diperbarui! ✨','success');
+  } catch(e) { toast('Upload gagal','error'); }
+  inp.value='';
+}
+async function saveProfile() {
+  const name=document.getElementById('prof-name').value.trim();
+  if (!name||!cu) return;
+  await db.collection('ibfa_users').doc(cu.uid).update({displayName:name});
+  await cu.updateProfile({displayName:name});
+  cuData.displayName=name; updateNav(); renderProfile();
+  toast('Profil disimpan! ✨','success');
+}
+
+// ===== GLOBAL CHAT =====
+function updateChatInput() {
+  const area=document.getElementById('chat-input-area');
+  if (!area) return;
+  if (cu) {
+    area.innerHTML=`
+      <div class="chat-input-wrap">
+        <div class="mention-dropdown" id="mention-dd" style="display:none"></div>
+        <input class="chat-input" id="chat-msg-inp" placeholder="Tulis pesan... (@mention)" maxlength="300"
+          onkeydown="onChatKeydown(event)" oninput="onChatInput(this)"/>
+      </div>
+      <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>`;
+  } else {
+    area.innerHTML=`<div class="chat-login-msg">Login untuk ikut chat — <a onclick="openLogin()">Login sekarang</a></div>`;
+  }
+}
+
+
+// ===== CENSOR EMAIL =====
+function censorEmail(email) {
+  if (!email) return '';
+  const [local, domain] = email.split('@');
+  if (!domain) return email;
+  const visible = local.substring(0, Math.min(4, local.length));
+  const stars = '*'.repeat(Math.max(3, local.length - 4));
+  return visible + stars + '@' + domain;
+}
+
+// ===== VIEW PROFILE =====
+async function viewProfile(uid) {
+  if (!uid) return;
+  openMo('mo-view-profile');
+  document.getElementById('view-prof-content').innerHTML = '<div style="text-align:center;padding:20px;color:var(--t2)">Memuat...</div>';
+  try {
+    const s = await db.collection('ibfa_users').doc(uid).get();
+    if (!s.exists) { document.getElementById('view-prof-content').innerHTML = '<div style="text-align:center;color:var(--t2)">User tidak ditemukan</div>'; return; }
+    const u = s.data();
+    const ph = u.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${uid}`;
+    const roleLabel = u.role==='owner'?'💎 Owner':u.role==='admin'?'👑 Admin':'👤 User';
+    const roleClass = u.role==='owner'?'rp-admin':u.role==='admin'?'rp-admin':'rp-user';
+    // count messages
+    const msgSnap = await db.collection('ibfa_chat').where('uid','==',uid).get();
+    document.getElementById('view-prof-content').innerHTML = `
+      <img class="view-prof-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${uid}'"/>
+      <div class="view-prof-name">${sanitize(u.displayName||'User')}</div>
+      <div class="view-prof-role"><span class="role-pill ${roleClass}">${roleLabel}</span></div>
+      <div class="view-prof-email">${censorEmail(u.email||'')}</div>
+      <div class="view-prof-stats">
+        <div class="view-stat"><div class="view-stat-n">${msgSnap.size}</div><div class="view-stat-l">Pesan Chat</div></div>
+        <div class="view-stat"><div class="view-stat-n">${u.role==='owner'?'∞':u.role==='admin'?'★':'—'}</div><div class="view-stat-l">Status</div></div>
+      </div>`;
+  } catch(e) { document.getElementById('view-prof-content').innerHTML = '<div style="text-align:center;color:var(--red)">Gagal memuat profil</div>'; }
+}
+
+// ===== ANNOUNCEMENT =====
+function loadAnnouncements() {
+  const wrap = document.getElementById('announcements-wrap');
+  if (!wrap) return;
+  db.collection('ibfa_announcements').orderBy('createdAt','desc').limit(20)
+    .onSnapshot(snap => {
+      wrap.innerHTML = '';
+      const now = Date.now();
+      const DEFAULT_EXPIRE_DAYS = 3;
+      snap.forEach(doc => {
+        const a = doc.data();
+        // Cek expired
+        let expireTs = null;
+        if (a.expireAt) {
+          expireTs = a.expireAt.toDate ? a.expireAt.toDate().getTime() : new Date(a.expireAt).getTime();
+        } else if (a.createdAt) {
+          // Default: 3 hari dari createdAt
+          expireTs = a.createdAt.toDate().getTime() + (DEFAULT_EXPIRE_DAYS * 24 * 60 * 60 * 1000);
+        }
+        // Skip jika sudah expired (kecuali admin - tetap tampilkan tapi beri tanda)
+        if (expireTs && now > expireTs && !isAdmin) return;
+
+        const ts = a.createdAt ? a.createdAt.toDate().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) : '';
+        const expired = expireTs && now > expireTs;
+        const expireDate = expireTs ? new Date(expireTs).toLocaleString('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+        const expireLabel = expired
+          ? '<span style="color:var(--red);font-size:10px">⏰ Expired</span>'
+          : expireDate ? `<span style="color:var(--t3);font-size:10px">⏰ Exp: ${expireDate}</span>` : '';
+        const delBtn = isAdmin ? `<button class="ann-del" onclick="deleteAnn('${doc.id}')" title="Hapus">✕</button>` : '';
+        const div = document.createElement('div');
+        div.className = `ann-card${a.pinned?' pinned':''}${expired?' expired':''}`;
+        if (expired) div.style.opacity = '0.5';
+        div.innerHTML = `
+          <div class="ann-head">
+            ${a.pinned ? '<span class="ann-pin">📌</span>' : '<span style="font-size:12px">📢</span>'}
+            <div class="ann-title">${sanitize(a.title||'')}</div>
+            ${delBtn}
+          </div>
+          <div class="ann-body">${sanitize(a.body||'')}</div>
+          <div class="ann-meta">Oleh ${sanitize(a.authorName||'Admin')} · ${ts} ${expireLabel}</div>`;
+        wrap.appendChild(div);
+      });
+    });
+}
+
+async function saveAnnouncement() {
+  if (!isAdmin) return;
+  const title = document.getElementById('ann-title-inp').value.trim();
+  const body = document.getElementById('ann-body-inp').value.trim();
+  const pinned = document.getElementById('ann-pin-inp').checked;
+  const expireVal = document.getElementById('ann-expire-inp').value;
+  if (!title || !body) { toast('Judul dan isi wajib diisi','warn'); return; }
+  const data = {
+    title, body, pinned,
+    authorName: cuData.displayName || cu.displayName || 'Admin',
+    authorUid: cu.uid,
+    createdAt: FS.FieldValue.serverTimestamp()
+  };
+  if (expireVal) {
+    data.expireAt = new Date(expireVal); // datetime-local format: YYYY-MM-DDTHH:mm
+  }
+  // Default 3 hari jika tidak diset (disimpan untuk referensi)
+  data.defaultExpireDays = 3;
+  await db.collection('ibfa_announcements').add(data);
+  document.getElementById('ann-title-inp').value = '';
+  document.getElementById('ann-body-inp').value = '';
+  document.getElementById('ann-pin-inp').checked = false;
+  document.getElementById('ann-expire-inp').value = '';
+  closeMo('mo-ann');
+  toast('Pengumuman dipost! 📢','success');
+}
+
+async function deleteAnn(id) {
+  if (!isAdmin) return;
+  if (!confirm('Hapus pengumuman ini?')) return;
+  await db.collection('ibfa_announcements').doc(id).delete();
+  toast('Pengumuman dihapus','info');
+}
+
+// ===== REACTIONS =====
+const EMOJIS = ['👍','❤️','😂','😮','🔥','⚽'];
+
+async function toggleReact(docId, emoji) {
+  if (!cu) { toast('Login dulu!','warn'); return; }
+  const ref = db.collection('ibfa_chat').doc(docId);
+  const snap = await ref.get();
+  if (!snap.exists) return;
+  const reactions = snap.data().reactions || {};
+  const users = reactions[emoji] || [];
+  const idx = users.indexOf(cu.uid);
+  if (idx === -1) {
+    reactions[emoji] = [...users, cu.uid];
+  } else {
+    reactions[emoji] = users.filter(u => u !== cu.uid);
+    if (reactions[emoji].length === 0) delete reactions[emoji];
+  }
+  await ref.update({ reactions });
+}
+
+function renderReactions(reactions, docId) {
+  if (!reactions || Object.keys(reactions).length === 0) return '';
+  return Object.entries(reactions).map(([emoji, users]) => {
+    const active = cu && users.includes(cu.uid) ? 'active' : '';
+    return `<button class="react-btn ${active}" onclick="toggleReact('${docId}','${emoji}')">${emoji} <span class="react-count">${users.length}</span></button>`;
+  }).join('');
+}
+
+let reactPickerOpen = null;
+function toggleReactPicker(docId, btn) {
+  // Tutup picker yang sudah terbuka
+  const existing = document.getElementById('rp-' + docId);
+  if (existing) { existing.remove(); reactPickerOpen = null; return; }
+  if (reactPickerOpen) { const old = document.getElementById('rp-' + reactPickerOpen); if(old) old.remove(); }
+
+  const picker = document.createElement('div');
+  picker.className = 'react-picker';
+  picker.id = 'rp-' + docId;
+  EMOJIS.forEach(e => {
+    const b = document.createElement('button');
+    b.className = 'react-picker-btn';
+    b.textContent = e;
+    b.onclick = (ev) => { ev.stopPropagation(); toggleReact(docId, e); picker.remove(); reactPickerOpen = null; };
+    picker.appendChild(b);
+  });
+
+  // Append ke body untuk pakai fixed positioning yang benar
+  document.body.appendChild(picker);
+  reactPickerOpen = docId;
+
+  // Posisikan di atas tombol 😊
+  const rect = btn.getBoundingClientRect();
+  const pickerW = 260; // estimasi lebar
+  let left = rect.left;
+  let top = rect.top - 55;
+  // Jangan sampai keluar layar kanan
+  if (left + pickerW > window.innerWidth) left = window.innerWidth - pickerW - 10;
+  if (left < 8) left = 8;
+  // Jika terlalu atas, tampilkan di bawah
+  if (top < 8) top = rect.bottom + 8;
+  picker.style.left = left + 'px';
+  picker.style.top = top + 'px';
+
+  setTimeout(() => {
+    document.addEventListener('click', function h(ev) {
+      if (!picker.contains(ev.target) && ev.target !== btn) {
+        picker.remove(); reactPickerOpen = null;
+        document.removeEventListener('click', h);
+      }
+    });
+  }, 100);
+}
+
+// ===== MENTION =====
+let allUsers = [];
+async function loadUsersForMention() {
+  const snap = await db.collection('ibfa_users').limit(50).get();
+  allUsers = snap.docs.map(d => d.data());
+}
+
+function onChatInput(inp) {
+  const val = inp.value;
+  const dd = document.getElementById('mention-dd');
+  // Cari @ terakhir yang belum ditutup bracket ]
+  const atIdx = val.lastIndexOf('@');
+  if (atIdx === -1) { dd.style.display = 'none'; return; }
+  // Cek apakah @ ini sudah jadi @[Nama] (sudah dipilih)
+  const afterAt = val.substring(atIdx);
+  if (afterAt.startsWith('@[')) { dd.style.display = 'none'; return; }
+  // Query = teks setelah @ (max 30 char, berhenti di @[ berikutnya)
+  const query = afterAt.substring(1).toLowerCase();
+  if (query.length === 0) {
+    // Tampilkan semua user
+    showMentionDropdown(dd, inp, atIdx, '');
+    return;
+  }
+  showMentionDropdown(dd, inp, atIdx, query);
+}
+
+function showMentionDropdown(dd, inp, atIdx, query) {
+  const matches = allUsers.filter(u =>
+    (u.displayName||'').toLowerCase().includes(query) && u.uid !== (cu && cu.uid)
+  );
+  if (!matches.length) { dd.style.display = 'none'; return; }
+  dd.style.display = 'block';
+  dd.innerHTML = '';
+  matches.slice(0, 5).forEach(u => {
+    const ph = u.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${u.uid}`;
+    const item = document.createElement('div');
+    item.className = 'mention-item';
+    item.innerHTML = `<img class="mention-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${u.uid}'"/> @${sanitize(u.displayName||'User')}`;
+    item.onmousedown = (e) => {
+      e.preventDefault(); // prevent input blur
+      const val = inp.value;
+      const before = val.substring(0, atIdx);
+      const after = val.substring(atIdx + 1 + (val.substring(atIdx+1).match(/^[^@]*/)?.[0]?.length||0));
+      // Format: @[Nama] - bracket sebagai penanda nama dengan spasi
+      inp.value = before + '@[' + (u.displayName||'User') + ']' + ' ';
+      dd.style.display = 'none';
+      inp.focus();
+    };
+    dd.appendChild(item);
+  });
+}
+
+function onChatKeydown(e) {
+  const dd = document.getElementById('mention-dd');
+  if (e.key === 'Escape') { dd.style.display = 'none'; return; }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMsg(); }
+}
+
+function renderChatText(text) {
+  // Render @[Nama] -> highlight biru, teks lain normal
+  const safe = sanitize(text);
+  // @[Nama] format
+  return safe.replace(/@\[([^\]]+)\]/g, '<span class="mention">@$1</span>');
+}
+
+// ===== PRESENCE (online count) =====
+let presenceRef=null;
+function initPresence(){
+  if(!cu||presenceRef)return;
+  try{
+    const rtdb=firebase.database();
+    const uid=cu.uid;
+    presenceRef=rtdb.ref('ibfa_online/'+uid);
+    presenceRef.set({uid,displayName:cuData.displayName||cu.displayName||'User',t:Date.now()});
+    presenceRef.onDisconnect().remove();
+    // count online
+    rtdb.ref('ibfa_online').on('value',snap=>{
+      const count=snap.numChildren();
+      const el=document.getElementById('chat-online-count');
+      if(el)el.textContent=count;
+    });
+  }catch(e){
+    // RTDB not enabled, fallback
+    const el=document.getElementById('chat-online-count');
+    if(el)el.textContent='—';
+  }
+}
+
+function deleteChatMsg(docId,uid){
+  if(!cu)return;
+  const canDelete=isAdmin||isOwner||(cu.uid===uid);
+  if(!canDelete){toast('Tidak bisa hapus pesan orang lain','warn');return;}
+  if(!confirm('Hapus pesan ini?'))return;
+  db.collection('ibfa_chat').doc(docId).delete()
+    .then(()=>toast('Pesan dihapus','info'))
+    .catch(()=>toast('Gagal hapus','error'));
+}
+
+function initChat() {
+  if (chatUnsub) return;
+  initPresence();
+  const msgs=document.getElementById('chat-msgs');
+  chatUnsub=db.collection('ibfa_chat')
+    .orderBy('createdAt','desc')
+    .limit(100)
+    .onSnapshot(snap=>{
+      msgs.innerHTML='';
+      const docs=[...snap.docs].reverse();
+      let lastDate='';
+      docs.forEach(doc=>{
+        const m=doc.data();
+        const docId=doc.id;
+        const ts=m.createdAt?m.createdAt.toDate():new Date();
+        const dateStr=ts.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+        if (dateStr!==lastDate) {
+          lastDate=dateStr;
+          const sep=document.createElement('div');
+          sep.className='chat-date-sep';
+          sep.textContent=dateStr;
+          msgs.appendChild(sep);
+        }
+        const isMe=cu&&m.uid===cu.uid;
+        const canDel=cu&&(isAdmin||isOwner||cu.uid===m.uid);
+        const ph=m.photoURL||`https://api.dicebear.com/7.x/bottts/svg?seed=${m.uid}`;
+        const timeStr=ts.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+        const div=document.createElement('div');
+        div.className=`chat-msg${isMe?' me':''}`;
+        const reactions = m.reactions || {};
+        const reacts = renderReactions(reactions, docId);
+        const replyPreview = m.replyTo ? `<div class="chat-reply-preview" onclick="scrollToMsg('${m.replyTo.msgId}')"><div class="chat-reply-name">${sanitize(m.replyTo.displayName||'')}</div><div class="chat-reply-text">${sanitize(m.replyTo.text||'')}</div></div>` : '';
+        div.innerHTML=`
+          <img class="chat-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${m.uid}'" onclick="viewProfile('${m.uid}')" style="cursor:pointer"/>
+          <div class="chat-msg-wrap">
+            <div class="chat-bubble">
+              <div class="chat-bubble-name" onclick="viewProfile('${m.uid}')" style="cursor:pointer">${m.displayName||'Anonymous'}</div>
+              ${replyPreview}
+              <div>${renderChatText(m.text)}</div>
+              <div class="chat-bubble-time">${timeStr}
+                ${cu?('<button class="react-add" onclick="setReply(\''+docId+'\',\''+sanitize(m.displayName||'User')+'\',\''+sanitize(m.text||'').substring(0,50)+'\' )" title="Balas">↩</button>'):''}
+                <button class="react-add" onclick="toggleReactPicker('${docId}',this)" title="Reaksi">😊</button>
+              </div>
+            </div>
+            ${reacts ? '<div class="chat-reactions">'+reacts+'</div>' : ''}
+          </div>`;
+        div.id = 'cmsg-' + docId;
+        msgs.appendChild(div);
+      });
+      msgs.scrollTop=msgs.scrollHeight;
+    });
+  updateChatInput();
+}
+
+function escHtml(s) { return sanitize(s); }
+function scrollToMsg(msgId) {
+  const el = document.getElementById('cmsg-' + msgId);
+  if (el) { el.scrollIntoView({behavior:'smooth',block:'center'}); el.style.background='rgba(0,100,255,0.1)'; setTimeout(()=>el.style.background='',1500); }
+}
+
+async function sendChatMsg() {
+  if (!cu) { toast('Login dulu!','warn'); return; }
+  if (!checkSpam('chat', 4000)) return;
+  const inp=document.getElementById('chat-msg-inp');
+  if (!inp) return;
+  const raw=inp.value.trim();
+  if (!validateText(raw)) { toast('Pesan tidak valid!','warn'); return; }
+  inp.value='';
+  const msgData = {
+    text: raw.substring(0,300),
+    uid:cu.uid,
+    displayName:sanitize(cuData.displayName||cu.displayName||'User'),
+    photoURL:cuData.photoURL||cu.photoURL||'',
+    createdAt:FS.FieldValue.serverTimestamp()
+  };
+  if (replyTo) {
+    msgData.replyTo = { msgId: replyTo.msgId, displayName: replyTo.displayName, text: replyTo.text.substring(0,100) };
+    cancelReply();
+  }
+  await db.collection('ibfa_chat').add(msgData);
+}
+
+// ===== MATCH COMMENTS =====
+function loadComments(matchId) {
+  const c=document.getElementById('cl-'+matchId); if (!c) return;
+  db.collection('ibfa_matches').doc(matchId).collection('comments')
+    .orderBy('createdAt').limit(25)
+    .onSnapshot(snap=>{
+      c.innerHTML='';
+      snap.forEach(d=>{
+        const cm=d.data();
+        const ph=cm.photoURL||`https://api.dicebear.com/7.x/bottts/svg?seed=${cm.uid}`;
+        const t=cm.createdAt?cm.createdAt.toDate().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'';
+        c.innerHTML+=`<div class="cmt-item">
+          <img class="cmt-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${cm.uid}'"/>
+          <div class="cmt-box">
+            <div class="cmt-auth">${cm.displayName||'Anonymous'}</div>
+            <div class="cmt-txt">${escHtml(cm.text)}</div>
+            <div class="cmt-time">${t}</div>
+          </div>
+        </div>`;
+      });
+      c.scrollTop=c.scrollHeight;
+    });
+}
+function sendComment(matchId) {
+  if (!cu) { toast('Login dulu!','warn'); return; }
+  if (!checkSpam('cmt_'+matchId, 5000)) return;
+  const inp=document.getElementById('ci-'+matchId);
+  const raw=inp.value.trim();
+  if (!validateText(raw)) { toast('Komentar tidak valid!','warn'); return; }
+  inp.value='';
+  db.collection('ibfa_matches').doc(matchId).collection('comments').add({
+    text: raw.substring(0,300),
+    uid:cu.uid,
+    displayName:sanitize(cuData.displayName||cu.displayName||'User'),
+    photoURL:cuData.photoURL||cu.photoURL||'',
+    createdAt:FS.FieldValue.serverTimestamp()
+  });
+}
+
+// ===== ADMIN - NATIONS =====
+async function saveNation() {
+  const name=document.getElementById('nat-name').value.trim();
+  const code=document.getElementById('nat-code').value.trim().toUpperCase();
+  const flag=document.getElementById('nat-flag').value.trim();
+  const group=document.getElementById('nat-group').value.trim();
+  if (!name||!code) { toast('Nama dan kode wajib','warn'); return; }
+  await db.collection('ibfa_nations').add({name,code,flag,group,points:0,played:0,won:0,drawn:0,lost:0,gf:0,ga:0,form:[],createdAt:FS.FieldValue.serverTimestamp()});
+  closeMo('mo-nation'); toast(`${flag} ${name} ditambahkan! 🎉`,'success'); loadAll();
+}
+
+function openEditNation(id) {
+  const n=nations.find(x=>x.id===id); if (!n) return;
+  document.getElementById('en-id').value=id;
+  document.getElementById('en-name').value=n.name||'';
+  document.getElementById('en-code').value=n.code||'';
+  document.getElementById('en-flag').value=n.flag||'';
+  document.getElementById('en-group').value=n.group||'';
+  document.getElementById('en-img-url').value=n.imageURL||'';
+  const prev=document.getElementById('en-img-preview');
+  const prevImg=document.getElementById('en-img-prev-img');
+  if (n.imageURL) { prevImg.src=n.imageURL; prev.style.display=''; }
+  else prev.style.display='none';
+  document.getElementById('en-img-file').value='';
+  openMo('mo-edit-nation');
+}
+function previewNatImg(url) {
+  const prev=document.getElementById('en-img-preview');
+  const img=document.getElementById('en-img-prev-img');
+  if (url) { img.src=url; prev.style.display=''; } else prev.style.display='none';
+}
+function previewNatFile(inp) {
+  if (!inp.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('en-img-url').value='';
+    document.getElementById('en-img-prev-img').src=e.target.result;
+    document.getElementById('en-img-preview').style.display='';
+  };
+  reader.readAsDataURL(inp.files[0]);
+}
+async function saveEditNation() {
+  const id=document.getElementById('en-id').value;
+  const name=document.getElementById('en-name').value.trim();
+  const code=document.getElementById('en-code').value.trim().toUpperCase();
+  const flag=document.getElementById('en-flag').value.trim();
+  const group=document.getElementById('en-group').value.trim();
+  if (!name||!code) { toast('Nama dan kode wajib','warn'); return; }
+  let imageURL=document.getElementById('en-img-url').value.trim();
+  const fileInp=document.getElementById('en-img-file');
+  if (fileInp.files[0]) {
+    toast('Mengupload gambar...','info');
+    try { imageURL=await uploadImg(fileInp.files[0]); } catch(e) { toast('Upload gagal','error'); return; }
+  }
+  await db.collection('ibfa_nations').doc(id).update({name,code,flag,group,imageURL});
+  closeMo('mo-edit-nation'); toast(`✅ ${flag} ${name} diperbarui!`,'success'); loadAll();
+}
+async function deleteNation() {
+  const id=document.getElementById('en-id').value;
+  const n=nations.find(x=>x.id===id);
+  if (!confirm(`Hapus ${n?.name||'negara ini'}?`)) return;
+  await db.collection('ibfa_nations').doc(id).delete();
+  closeMo('mo-edit-nation'); toast('Negara dihapus','warn'); loadAll();
+}
+
+// ===== ADMIN - MATCHES =====
+function openAddMatch() {
+  ['mat-a','mat-b'].forEach(id=>{
+    const s=document.getElementById(id); s.innerHTML='';
+    nations.forEach(n=>{ s.innerHTML+=`<option value="${n.name}">${n.flag} ${n.name}</option>`; });
+  });
+  openMo('mo-match');
+}
+async function saveMatch() {
+  const a=document.getElementById('mat-a').value;
+  const b=document.getElementById('mat-b').value;
+  if (a===b) { toast('Tim tidak boleh sama','warn'); return; }
+  const dateVal=document.getElementById('mat-date').value;
+  await db.collection('ibfa_matches').add({
+    teamA:a,teamB:b,scoreA:null,scoreB:null,
+    date:dateVal?new Date(dateVal):new Date(),
+    competition:document.getElementById('mat-comp').value.trim()||'IBFA Match',
+    status:'upcoming',createdAt:FS.FieldValue.serverTimestamp()
+  });
+  closeMo('mo-match'); toast('Pertandingan dijadwalkan! ⚽','success'); loadAll();
+}
+
+// ===== ADMIN - SCORE =====
+function openScore(id,a,b,existingA,existingB) {
+  document.getElementById('sc-id').value=id;
+  document.getElementById('score-teams').innerHTML=getNatFlag(a)+' '+a+'  vs  '+b+' '+getNatFlag(b);
+  document.getElementById('sc-a').value=existingA!==undefined&&existingA!==null?existingA:'';
+  document.getElementById('sc-b').value=existingB!==undefined&&existingB!==null?existingB:'';
+  document.getElementById('sc-wo').value='';
+  // Update WO option labels with team names
+  document.getElementById('sc-wo-a').textContent='WO — '+a+' (kalah 0-3)';
+  document.getElementById('sc-wo-b').textContent='WO — '+b+' (kalah 0-3)';
+  // Update title based on whether editing
+  const isEdit = existingA!==undefined && existingA!==null;
+  document.getElementById('score-modal-title').textContent = isEdit ? '✏️ Edit Skor' : '✅ Input Skor';
+  onWOChange();
+  openMo('mo-score');
+}
+
+function onWOChange() {
+  const wo = document.getElementById('sc-wo').value;
+  const scoreInputs = document.querySelectorAll('#sc-a,#sc-b');
+  scoreInputs.forEach(el => { el.disabled = !!wo; el.style.opacity = wo ? '0.4' : '1'; });
+}
+async function submitScore() {
+  const id=document.getElementById('sc-id').value;
+  const woSide=document.getElementById('sc-wo')?.value||'';
+  let sA, sB, isWO=false;
+  if (woSide) {
+    // WO: yang WO kalah 0-3
+    isWO=true;
+    sA = woSide==='A' ? 0 : 3;
+    sB = woSide==='B' ? 0 : 3;
+  } else {
+    sA=parseInt(document.getElementById('sc-a').value);
+    sB=parseInt(document.getElementById('sc-b').value);
+    if (isNaN(sA)||isNaN(sB)) { toast('Masukkan skor valid','warn'); return; }
+  }
+  const mRef=db.collection('ibfa_matches').doc(id);
+  const mDoc=await mRef.get(); if (!mDoc.exists) return;
+  const m=mDoc.data();
+
+  // Reverse previous stats if match was already done (edit mode)
+  if (m.status==='done' && m.scoreA!==null && m.scoreB!==null) {
+    const na2=nations.find(n=>n.name===m.teamA);
+    const nb2=nations.find(n=>n.name===m.teamB);
+    if (na2&&nb2) {
+      const oldRa=m.scoreA>m.scoreB?'W':m.scoreA===m.scoreB?'D':m.result==='WO_A'?'WO':'L';
+      const oldRb=m.scoreB>m.scoreA?'W':m.scoreA===m.scoreB?'D':m.result==='WO_B'?'WO':'L';
+      const oldPa=oldRa==='W'?3:oldRa==='D'?1:0;
+      const oldPb=oldRb==='W'?3:oldRb==='D'?1:0;
+      const DEC=FS.FieldValue.increment;
+      // Reverse old stats
+      await db.collection('ibfa_nations').doc(na2.id).update({
+        points:DEC(-oldPa),played:DEC(-1),
+        won:DEC(-(oldRa==='W'?1:0)),drawn:DEC(-(oldRa==='D'?1:0)),lost:DEC(-(oldRa==='L'?1:0)),
+        gf:DEC(-(parseInt(m.scoreA)||0)),ga:DEC(-(parseInt(m.scoreB)||0))
+      });
+      await db.collection('ibfa_nations').doc(nb2.id).update({
+        points:DEC(-oldPb),played:DEC(-1),
+        won:DEC(-(oldRb==='W'?1:0)),drawn:DEC(-(oldRb==='D'?1:0)),lost:DEC(-(oldRb==='L'?1:0)),
+        gf:DEC(-(parseInt(m.scoreB)||0)),ga:DEC(-(parseInt(m.scoreA)||0))
+      });
+    }
+  }
+
+  const resultTag = isWO ? (woSide==='A'?'WO_A':'WO_B') : null;
+  await mRef.update({scoreA:sA,scoreB:sB,status:'done',result:resultTag||null,isWO:isWO||false});
+
+  const na=nations.find(n=>n.name===m.teamA);
+  const nb=nations.find(n=>n.name===m.teamB);
+  if (na&&nb) {
+    const prev={};
+    nations.forEach((n,i)=>{prev[n.id]=i+1;prev[n.id+'_e']=Date.now()+(8*60*60*1000);});
+    localStorage.setItem('ibfa_rank_prev',JSON.stringify(prev));
+    const rA=sA>sB?'W':sA===sB?'D':'L';
+    const rB=sB>sA?'W':sA===sB?'D':'L';
+    const formA=isWO&&woSide==='A'?'WO':rA;
+    const formB=isWO&&woSide==='B'?'WO':rB;
+    const pA=rA==='W'?3:rA==='D'?1:0;
+    const pB=rB==='W'?3:rB==='D'?1:0;
+    const INC=FS.FieldValue.increment;
+    await db.collection('ibfa_nations').doc(na.id).update({
+      points:INC(pA),played:INC(1),
+      won:INC(rA==='W'?1:0),drawn:INC(rA==='D'?1:0),lost:INC(rA==='L'?1:0),
+      gf:INC(sA),ga:INC(sB),form:[...(na.form||[]).slice(-4),formA]
+    });
+    await db.collection('ibfa_nations').doc(nb.id).update({
+      points:INC(pB),played:INC(1),
+      won:INC(rB==='W'?1:0),drawn:INC(rB==='D'?1:0),lost:INC(rB==='L'?1:0),
+      gf:INC(sB),ga:INC(sA),form:[...(nb.form||[]).slice(-4),formB]
+    });
+  }
+  if (document.getElementById('sc-wo')) document.getElementById('sc-wo').value='';
+  closeMo('mo-score'); toast('Skor disimpan! 🏆','success'); loadAll();
+}
+
+async function deleteMatch(id) {
+  if (!isAdmin) return;
+  if (!confirm('Hapus pertandingan ini?')) return;
+  const mRef = db.collection('ibfa_matches').doc(id);
+  const mDoc = await mRef.get();
+  if (!mDoc.exists) return;
+  const m = mDoc.data();
+  // If match was done, reverse stats
+  if (m.status==='done' && m.scoreA!==null && m.scoreB!==null) {
+    const na=nations.find(n=>n.name===m.teamA);
+    const nb=nations.find(n=>n.name===m.teamB);
+    if (na&&nb) {
+      const sA=parseInt(m.scoreA)||0, sB=parseInt(m.scoreB)||0;
+      const rA=sA>sB?'W':sA===sB?'D':'L';
+      const rB=sB>sA?'W':sA===sB?'D':'L';
+      const pA=rA==='W'?3:rA==='D'?1:0;
+      const pB=rB==='W'?3:rB==='D'?1:0;
+      const DEC=FS.FieldValue.increment;
+      await db.collection('ibfa_nations').doc(na.id).update({
+        points:DEC(-pA),played:DEC(-1),
+        won:DEC(-(rA==='W'?1:0)),drawn:DEC(-(rA==='D'?1:0)),lost:DEC(-(rA==='L'?1:0)),
+        gf:DEC(-sA),ga:DEC(-sB)
+      });
+      await db.collection('ibfa_nations').doc(nb.id).update({
+        points:DEC(-pB),played:DEC(-1),
+        won:DEC(-(rB==='W'?1:0)),drawn:DEC(-(rB==='D'?1:0)),lost:DEC(-(rB==='L'?1:0)),
+        gf:DEC(-sB),ga:DEC(-sA)
+      });
+    }
+  }
+  await mRef.delete();
+  toast('Match dihapus','warn');
+  loadAll();
+}
+async function setLive(id) {
+  await db.collection('ibfa_matches').doc(id).update({status:'live'});
+  toast('Match LIVE! 🔴','success'); loadAll();
+}
+async function cancelMatch(id) {
+  if (!confirm('Batalkan pertandingan?')) return;
+  await db.collection('ibfa_matches').doc(id).update({status:'cancelled'});
+  toast('Dibatalkan','warn'); loadAll();
+}
+async function confirmReset() {
+  if (!confirm('⚠ RESET SEASON? Semua poin kembali ke 0!')) return;
+  if (!confirm('Yakin 100%? Tidak bisa dikembalikan!')) return;
+  const snap=await db.collection('ibfa_nations').get();
+  await Promise.all(snap.docs.map(d=>d.ref.update({points:0,played:0,won:0,drawn:0,lost:0,gf:0,ga:0,form:[]})));
+  localStorage.removeItem('ibfa_rank_prev');
+  toast('Season direset! 🔄','warn'); loadAll();
+}
+
+// ===== OWNER: USER MANAGEMENT =====
+async function loadAllUsers() {
+  if (!isOwner) return;
+  const list=document.getElementById('user-list');
+  list.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div style="color:var(--t2)">Memuat...</div></div>';
+  try {
+    const snap=await db.collection('ibfa_users').orderBy('createdAt','desc').limit(50).get();
+    if (snap.empty) { list.innerHTML='<div class="empty"><div class="empty-ico">👥</div><div style="color:var(--t2)">Belum ada user</div></div>'; return; }
+    list.innerHTML='';
+    snap.forEach(doc=>{
+      const u=doc.data(); const uid=doc.id;
+      if (u.email===OWNER_EMAIL) return;
+      const ph=u.photoURL||`https://api.dicebear.com/7.x/bottts/svg?seed=${uid}`;
+      const roleBadge=u.role==='admin'
+        ?'<span class="role-pill rp-admin" style="font-size:9px">👑 Admin</span>'
+        :'<span class="role-pill rp-user" style="font-size:9px">👤 User</span>';
+      const actionBtn=u.role==='admin'
+        ?`<button class="btn btn-warn btn-sm" onclick="setUserRole('${uid}','user')">Demote</button>`
+        :`<button class="btn btn-success btn-sm" onclick="setUserRole('${uid}','admin')">Promote</button>`;
+      const row=document.createElement('div');
+      row.className='user-row'; row.id='ur-'+uid;
+      row.innerHTML=`
+        <img class="user-av" src="${ph}" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${uid}'"/>
+        <div class="user-info">
+          <div class="user-name">${u.displayName||'No Name'} ${roleBadge}</div>
+          <div class="user-email">${u.email||'-'}</div>
+        </div>
+        <div class="user-actions">${actionBtn}</div>`;
+      list.appendChild(row);
+    });
+  } catch(e) {
+    list.innerHTML=`<div class="empty"><div style="color:var(--red)">Error: ${e.message}</div></div>`;
+  }
+}
+async function setUserRole(uid,newRole) {
+  if (!isOwner) return;
+  await db.collection('ibfa_users').doc(uid).update({role:newRole});
+  toast(`Role diubah ke ${newRole}! ✅`,'success');
+  loadAllUsers();
+}
+
+// ===== MATCH ACTION DELEGATION =====
+// Store match data in registry to avoid inline onclick escaping issues
+const _matchReg = {};
+function _mact(act, idx) {
+  const m = _matchReg[idx];
+  if (!m || !isAdmin) return;
+  if (act==='live') setLive(m.id);
+  else if (act==='score') openScore(m.id, m.teamA, m.teamB);
+  else if (act==='editscore') openScore(m.id, m.teamA, m.teamB, m.scoreA, m.scoreB);
+  else if (act==='report') openReport(m.id);
+  else if (act==='cancel') cancelMatch(m.id);
+  else if (act==='delete') deleteMatch(m.id);
+}
+
+// ===== FILTER =====
+function filterRank(type,el) {
+  document.querySelectorAll('#page-ranking .chip').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  renderRanking(type==='top10'?nations.slice(0,10):nations);
+}
+function filterMatch(type,el) {
+  document.querySelectorAll('#match-filters .chip').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  renderMatches(type==='all'?matches:matches.filter(m=>m.status===type));
+}
+
+// ===== EXPORT =====
+function exportRanking() {
+  html2canvas(document.getElementById('ranking-wrap'),{
+    backgroundColor:document.documentElement.dataset.theme==='dark'?'#141830':'#ffffff',
+    scale:2
+  }).then(c=>{
+    const a=document.createElement('a');
+    a.download=`IBFA_Ranking_${Date.now()}.png`;
+    a.href=c.toDataURL(); a.click();
+    toast('Disimpan! 📸','success');
+  });
+}
+</script>
+</body>
+</html>
